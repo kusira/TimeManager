@@ -60,7 +60,7 @@ namespace Components.Game.Graph.Scripts
             public bool isWorking;
         }
 
-        [SerializeField] private GraphArrangementer graphArrangementer;
+        [SerializeField] private GraphGenerator GraphGenerator;
         
         [SerializeField] private List<TaskNode> allTasks = new List<TaskNode>();
         [SerializeField] private List<Worker> workers = new List<Worker>();
@@ -93,16 +93,16 @@ namespace Components.Game.Graph.Scripts
 
         public void Initialize()
         {
-            if (graphArrangementer == null)
+            if (GraphGenerator == null)
             {
-                graphArrangementer = FindFirstObjectByType<GraphArrangementer>();
+                GraphGenerator = FindFirstObjectByType<GraphGenerator>();
             }
 
-            if (graphArrangementer == null) return;
+            if (GraphGenerator == null) return;
 
-            var vertices = graphArrangementer.GetVertices();
-            var edges = graphArrangementer.GetEdges();
-            var vertexObjects = graphArrangementer.GetGeneratedVertexObjects();
+            var vertices = GraphGenerator.GetVertices();
+            var edges = GraphGenerator.GetEdges();
+            var vertexObjects = GraphGenerator.GetGeneratedVertexObjects();
 
             if (vertices == null || vertices.Count == 0 || vertexObjects == null || vertexObjects.Count == 0)
             {

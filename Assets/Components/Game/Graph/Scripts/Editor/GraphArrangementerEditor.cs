@@ -3,14 +3,14 @@ using UnityEngine;
 
 namespace Components.Game.Graph.Scripts.Editor
 {
-    [CustomEditor(typeof(GraphArrangementer))]
-    public class GraphArrangementerEditor : UnityEditor.Editor
+    [CustomEditor(typeof(GraphGenerator))]
+    public class GraphGeneratorEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
 
-            GraphArrangementer arrangementer = (GraphArrangementer)target;
+            GraphGenerator arrangementer = (GraphGenerator)target;
 
             if (GUILayout.Button("Generate Graph"))
             {

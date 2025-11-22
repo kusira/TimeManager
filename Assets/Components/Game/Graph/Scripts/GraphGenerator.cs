@@ -6,7 +6,7 @@ namespace Components.Game.Graph.Scripts
 {
     // WorkerType Enum removed as it's determined by row index 'i'
 
-    public class GraphArrangementer : MonoBehaviour
+    public class GraphGenerator : MonoBehaviour
     {
         [System.Serializable]
         public class VertexData
@@ -38,15 +38,35 @@ namespace Components.Game.Graph.Scripts
         [SerializeField] private Transform graphParent;
 
         [Header("Graph Data")]
-        [SerializeField] private List<VertexData> vertices = new List<VertexData>();
-        [SerializeField] private List<EdgeData> edges = new List<EdgeData>();
+        [SerializeField] private Components.Game.StageDatabase stageDatabase;
+        [SerializeField] private int currentStageIndex = 0;
+        
+        // インスペクタからの直接入力を防ぐため SerializeField を削除
+        private List<VertexData> vertices = new List<VertexData>();
+        private List<EdgeData> edges = new List<EdgeData>();
 
         // 生成された頂点のGameObjectを保持するリスト（外部参照用）
         private List<GameObject> generatedVertexObjects = new List<GameObject>();
 
         private void Start()
         {
+            // StageDatabaseからデータをロードする
+            LoadStageData();
             GenerateGraph();
+        }
+
+        private void LoadStageData()
+        {
+            if (stageDatabase != null)
+            {
+                var stageData = stageDatabase.GetStageData(currentStageIndex);
+                if (stageData != null)
+                {
+                    this.vertices = new List<VertexData>(stageData.vertices);
+                    this.edges = new List<EdgeData>(stageData.edges);
+                    Debug.Log($"Loaded Stage Data: {stageData.stageName} (Vertices: {vertices.Count}, Edges: {edges.Count})");
+                }
+            }
         }
 
         public void GenerateGraph()

@@ -16,12 +16,29 @@ namespace Components.Game.Items.Scripts
         [SerializeField] private Transform itemParent;
 
         [Header("Data")]
-        [Tooltip("生成するアイテムのIDリスト")]
-        [SerializeField] private List<string> itemIds = new List<string>();
+        [SerializeField] private Components.Game.StageDatabase stageDatabase;
+        [SerializeField] private int currentStageIndex = 0;
+        
+        // インスペクタからの直接入力を防ぐため SerializeField を削除
+        private List<string> itemIds = new List<string>();
 
         void Start()
         {
-          GenerateItems();
+            LoadStageData();
+            GenerateItems();
+        }
+
+        private void LoadStageData()
+        {
+            if (stageDatabase != null)
+            {
+                var stageData = stageDatabase.GetStageData(currentStageIndex);
+                if (stageData != null)
+                {
+                    this.itemIds = new List<string>(stageData.itemIds);
+                    Debug.Log($"Loaded Stage Data for Items: {stageData.stageName} (Items: {itemIds.Count})");
+                }
+            }
         }
 
         /// <summary>
