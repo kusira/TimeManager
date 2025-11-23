@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1375863000598055515}
   - component: {fileID: 4274465121787028081}
   - component: {fileID: 5170735028171373677}
+  - component: {fileID: 6803836853638485508}
   m_Layer: 0
   m_Name: WorkerB
   m_TagString: WorkerB
@@ -163,6 +164,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6803836853638485508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445241721637705209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b2d44f5a69d50f4e86936ea1b15bff1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorkerAnimationController
+  workerType: 1
 --- !u!1 &1522665465811107470
 GameObject:
   m_ObjectHideFlags: 0
@@ -819,7 +833,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 4
+  m_SortingOrder: -5
   m_Sprite: {fileID: 7087900340034589174, guid: 7854fb90783fbbc4d83b43fb7d4dc89b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1127,7 +1141,7 @@ Transform:
   m_GameObject: {fileID: 7379549337930648316}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.65, y: -0.69, z: 0}
+  m_LocalPosition: {x: 5.514, y: -1.83, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1179,13 +1193,13 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 4
+  m_SortingOrder: -5
   m_Sprite: {fileID: -307403728978620464, guid: 676b805963e170c4ea902479e65f5cd5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 6.82, y: 1.32}
+  m_DrawMode: 1
+  m_Size: {x: 7, y: 3.4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

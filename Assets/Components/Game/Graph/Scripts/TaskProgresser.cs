@@ -49,6 +49,13 @@ namespace Components.Game.Graph.Scripts
             // Completion Animation
             public bool isAnimatingCompletion = false;
             public float completionAnimTime = 0f; 
+
+            // Bonus Animation
+            public float remainingTimeReduction = 0f; // アニメーションで適用待ちの時間
+            public float reductionSpeed = 0f; // 1秒あたりに適用する時間
+            public bool isApplyingBonus = false;
+            public Color defaultMaskColor; // 色変更からの復帰用
+            public bool hasSavedColor = false;
         }
 
         [System.Serializable]
@@ -64,6 +71,10 @@ namespace Components.Game.Graph.Scripts
         
         [SerializeField] private List<TaskNode> allTasks = new List<TaskNode>();
         [SerializeField] private List<Worker> workers = new List<Worker>();
+
+        [Header("Bonus Animation Settings")]
+        [SerializeField] private float bonusAnimDuration = 0.15f;
+        [SerializeField] private Color bonusMaskColor = new Color(1f, 1f, 0.5f); // 少し黄色
 
         private bool isInitialized = false;
         private const float AlphaTransitionSpeed = 1.0f / 0.3f; 
@@ -158,56 +169,19 @@ namespace Components.Game.Graph.Scripts
                         task.maskRenderer = mask.GetComponent<SpriteRenderer>();
                         task.maskImage = mask.GetComponent<Image>();
                         
+                        // Save default color
+                        if (task.maskRenderer != null)
+                        {
+                            task.defaultMaskColor = task.maskRenderer.color;
+                            task.hasSavedColor = true;
+                        }
+                        else if (task.maskImage != null)
+                        {
+                            task.defaultMaskColor = task.maskImage.color;
+                            task.hasSavedColor = true;
+                        }
+
                         // Calculate Height for Pivot Simulation
-                        // If Pivot is Center (default), scaling Y shrinks from both top and bottom.
-                        // To simulate Bottom Pivot (shrinking downwards to bottom), we need to move position DOWN as we shrink.
-                        // Wait, if we want it to be anchored at Bottom Center, and shrink Y:
-                        // Top should move down, Bottom should stay fixed.
-                        // Center = Bottom + Height/2.
-                        // New Center = Bottom + NewHeight/2.
-                        // Delta Center = (NewHeight - Height) / 2.
-                        // Since NewHeight < Height, Delta is negative (moves down).
-                        
-                        // NOTE: User request "黒マスクのbottom centerを基準としたい"
-                        // Usually masks are covering the content.
-                        // If it's a progress bar filling UP, the mask should shrink from TOP to BOTTOM?
-                        // Or shrink from Bottom to Top?
-                        // "逆方向に動かして" implies revealing.
-                        // If content is static, Mask covers it.
-                        // To reveal from bottom up: Mask Top moves up? No.
-                        // Mask Bottom moves up? Revealing bottom.
-                        // That means Mask is anchored at TOP?
-                        // If mask is anchored at Bottom, scaling Y means top comes down. This reveals Top.
-                        // Usually fill amounts go from Bottom to Top.
-                        // So we want to REVEAL from Bottom to Top.
-                        // This means the Mask should shrink upwards (Bottom moves up)?
-                        // OR Mask moves/shrinks such that bottom part becomes visible first.
-                        // If Mask is on top, and we shrink Y:
-                        // If Pivot is Bottom: Top comes down. Bottom stays. -> Reveals Top (if background is white).
-                        // If Pivot is Top: Bottom goes up. Top stays. -> Reveals Bottom.
-                        
-                        // User said "bottom centerを基準としたい".
-                        // This literally means pivot is at Bottom Center.
-                        // If we shrink scale Y with Bottom Pivot: The Top edge comes down. The Bottom edge stays fixed.
-                        // This visual effect is: The bar shrinks downwards.
-                        // This reveals whatever is *above* the mask? Or if the mask *is* the bar?
-                        // "GaugeMask...黒いマスク...上下させることで進捗...逆方向に"
-                        // If it's a mask covering the "filled" state.
-                        // We want to reveal the fill from bottom to top (standard fill).
-                        // So the Mask needs to disappear from bottom to top.
-                        // This means Mask Bottom edge moves UP.
-                        // This implies Mask Pivot should be TOP. (Shrinking Y pulls bottom up).
-                        // BUT user explicitly asked "bottom centerを基準としたい".
-                        // Maybe the Mask *IS* the fill? "GaugeMask...黒いマスク". Usually implies it blocks view.
-                        // If it's a mask, and pivot is Bottom: It shrinks down.
-                        // This means the top part becomes empty (revealed?).
-                        // If the underlying sprite is the "Empty" state and Mask is "Fill"? No, "Mask" usually hides "Fill".
-                        
-                        // Let's assume user knows what they want: Pivot at Bottom Center.
-                        // Behavior: Scale Y shrinks -> Top comes down.
-                        // I will implement Pivot simulation for Bottom Center.
-                        // Delta Pos = (NewScale.y - InitialScale.y) * Height / 2 (If localScale=1 is Height)
-                        
                         RectTransform rt = mask.GetComponent<RectTransform>();
                         if (rt != null)
                         {
@@ -216,10 +190,6 @@ namespace Components.Game.Graph.Scripts
                         else
                         {
                             SpriteRenderer sr = mask.GetComponent<SpriteRenderer>();
-                            if (sr != null) task.maskHeight = sr.bounds.size.y; // Bounds size in world? Need local.
-                            // For Sprite, local bounds size Y * localScale.y is effective height.
-                            // Let's use Sprite.bounds.size.y / transform.lossyScale.y to get unscaled local size?
-                            // Simplified: task.maskHeight = sr.sprite.bounds.size.y;
                             if (sr != null && sr.sprite != null)
                                 task.maskHeight = sr.sprite.bounds.size.y;
                             else
@@ -276,8 +246,7 @@ namespace Components.Game.Graph.Scripts
             foreach(var t in allTasks) 
             {
                 t.currentMaskAlpha = t.targetMaskAlpha;
-                if(t.spriteRenderer != null) { var c=t.spriteRenderer.color; c.a=1f; t.spriteRenderer.color=c; }
-                if(t.uiImage != null) { var c=t.uiImage.color; c.a=1f; t.uiImage.color=c; }
+                ApplyMaskAlpha(t, t.currentMaskAlpha); // 初期化時に色も戻す
             }
             UpdateVisualsImmediate(); 
         }
@@ -288,6 +257,27 @@ namespace Components.Game.Graph.Scripts
             {
                 if (worker.currentTask != null)
                 {
+                    // ボーナス時間の加算処理
+                    if (worker.currentTask.remainingTimeReduction > 0)
+                    {
+                        worker.currentTask.isApplyingBonus = true;
+                        float amount = worker.currentTask.reductionSpeed * Time.deltaTime;
+                        
+                        // 残りを超えないように
+                        if (amount > worker.currentTask.remainingTimeReduction)
+                        {
+                            amount = worker.currentTask.remainingTimeReduction;
+                        }
+                        
+                        worker.currentTask.currentTime += amount;
+                        worker.currentTask.remainingTimeReduction -= amount;
+                    }
+                    else
+                    {
+                        worker.currentTask.isApplyingBonus = false;
+                    }
+
+                    // 通常時間の加算
                     worker.currentTask.currentTime += Time.deltaTime;
                     
                     if (worker.currentTask.currentTime >= worker.currentTask.totalTime)
@@ -335,6 +325,10 @@ namespace Components.Game.Graph.Scripts
                 worker.currentTask.isCompleted = true;
                 worker.currentTask.currentTime = worker.currentTask.totalTime; 
                 
+                // ボーナス処理も終了
+                worker.currentTask.remainingTimeReduction = 0f;
+                worker.currentTask.isApplyingBonus = false;
+
                 worker.currentTask.isAnimatingCompletion = true;
                 worker.currentTask.completionAnimTime = 0f;
 
@@ -350,14 +344,14 @@ namespace Components.Game.Graph.Scripts
             var worker = workers.Find(w => w.workerIndex == workerIndex);
             if (worker != null && worker.isWorking && worker.currentTask != null)
             {
-                worker.currentTask.currentTime += timeReduction;
-
-                if (worker.currentTask.currentTime >= worker.currentTask.totalTime)
-                {
-                    // Handled in Update
-                }
+                // 即時加算ではなく、残り時間に積む
+                worker.currentTask.remainingTimeReduction += timeReduction;
                 
-                Debug.Log($"Reduced time for Worker {worker.label} by {timeReduction}. Current: {worker.currentTask.currentTime}/{worker.currentTask.totalTime}");
+                // 速度を計算（0.15秒で消化、既に加算中なら再計算）
+                // 単純に固定時間で消化する場合、残量が増えると速度が上がる
+                worker.currentTask.reductionSpeed = worker.currentTask.remainingTimeReduction / bonusAnimDuration;
+                
+                Debug.Log($"Bonus added for Worker {worker.label}. Amount: {timeReduction}, New Remaining: {worker.currentTask.remainingTimeReduction}");
             }
             else
             {
@@ -460,9 +454,6 @@ namespace Components.Game.Graph.Scripts
                         task.gaugeMask.localScale = newScale;
 
                         // Position adjustment for Bottom Pivot
-                        // Center moves DOWN by half the scale difference
-                        // DeltaScaleY = currentScaleY - initialScaleY (negative)
-                        // Shift Y = DeltaScaleY * Height / 2
                         float deltaY = (currentScaleY - task.maskInitialScale.y) * task.maskHeight * 0.5f;
                         
                         Vector3 newPos = task.maskInitialPos;
@@ -475,17 +466,23 @@ namespace Components.Game.Graph.Scripts
 
         private void ApplyMaskAlpha(TaskNode task, float alpha)
         {
+            Color targetColor = task.hasSavedColor ? task.defaultMaskColor : Color.black;
+            
+            // ボーナス適用中なら黄色くする
+            if (task.isApplyingBonus)
+            {
+                targetColor = bonusMaskColor;
+            }
+
+            targetColor.a = alpha;
+
             if (task.maskRenderer != null)
             {
-                Color c = task.maskRenderer.color;
-                c.a = alpha;
-                task.maskRenderer.color = c;
+                task.maskRenderer.color = targetColor;
             }
             else if (task.maskImage != null)
             {
-                Color c = task.maskImage.color;
-                c.a = alpha;
-                task.maskImage.color = c;
+                task.maskImage.color = targetColor;
             }
         }
 

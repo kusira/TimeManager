@@ -19,9 +19,6 @@ MonoBehaviour:
   - id: jelly
     icon: {fileID: 7146864394690992925, guid: 04b0a9ff4bf40f84a8b41a07aab0bb57, type: 3}
     timeReduction: 4
-  - id: monster_blue
+  - id: monster
     icon: {fileID: -2055008003363216766, guid: be1224818ee32a8429d1bd9447e1d497, type: 3}
     timeReduction: 6
-  - id: monster_pink
-    icon: {fileID: 5703228454191173365, guid: 6e3b9c8a0f9b3394aace308c758ea876, type: 3}
-    timeReduction: 8

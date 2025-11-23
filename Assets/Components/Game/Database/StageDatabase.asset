@@ -41,6 +41,10 @@ MonoBehaviour:
       toIndex: 4
     - fromIndex: 4
       toIndex: 2
-    itemIds:
-    - riceball
-    - jelly
+    stageItems:
+    - itemId: jelly
+      count: 2
+    - itemId: riceball
+      count: 3
+    - itemId: monster
+      count: 1
