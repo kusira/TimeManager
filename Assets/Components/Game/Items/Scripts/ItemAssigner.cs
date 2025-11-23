@@ -13,16 +13,16 @@ namespace Components.Game.Items.Scripts
         [Tooltip("初期個数")]
         [SerializeField] private int initialCount = 1;
 
-        [Header("UI References (Assign in Inspector)")]
-        [Tooltip("ItemHolder (SpriteRenderer component)")]
+        [Header("UI 参照 (インスペクターで割り当て)")]
+        [Tooltip("ItemHolder（SpriteRenderer コンポーネント）")]
         [SerializeField] private SpriteRenderer itemHolder;
         
-        [Tooltip("ItemText (Game Object with TMP_Text component or TMP_Text directly)")]
-        [SerializeField] private GameObject itemTextObject; // Changed from TMP_Text to GameObject
+        [Tooltip("ItemText（TMP_Text コンポーネントを持つゲームオブジェクト、または TMP_Text そのもの）")]
+        [SerializeField] private GameObject itemTextObject; // TMP_Text から GameObject へ変更
         private TMP_Text itemText;
 
-        [Tooltip("CountText (Game Object with TMP_Text component or TMP_Text directly)")]
-        [SerializeField] private GameObject countTextObject; // Changed from TMP_Text to GameObject
+        [Tooltip("CountText（TMP_Text コンポーネントを持つゲームオブジェクト、または TMP_Text そのもの）")]
+        [SerializeField] private GameObject countTextObject; // TMP_Text から GameObject へ変更
         private TMP_Text countText;
 
         // 外部公開プロパティ
@@ -98,7 +98,7 @@ namespace Components.Game.Items.Scripts
                 if (itemText != null)
                 {
                     // "+<数値>" の形式で表示
-                    itemText.text = "+" + itemData.timeReduction.ToString();
+                    itemText.text = "-" + itemData.timeReduction.ToString();
                 }
 
                 if (countText != null)
