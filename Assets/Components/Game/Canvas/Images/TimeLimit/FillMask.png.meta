@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 981aed4672334744eb7371216651fdae
+guid: f399834c2dae48442b5eb1fc5f3eb561
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1399725893816511699
-    second: Fill_0
+      213: 7482667652216324306
+    second: Square_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Fill_0
+      name: FillMask
       rect:
         serializedVersion: 2
-        x: 76
-        y: 43
-        width: 612
-        height: 112
+        x: 0
+        y: 0
+        width: 100
+        height: 100
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 35, y: 0, z: 25, w: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3dc69dbc843dc6310800000000000000
-      internalID: 1399725893816511699
+      spriteID: 2d009a6b596c7d760800000000000000
+      internalID: 7482667652216324306
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 06b02cbdbfe75f84c8fe4372ae05d9d6
+    spriteID: f9ba78b1e316e73439f4f2e8dea83ebb
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Fill_0: 1399725893816511699
+      FillMask: 7482667652216324306
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
