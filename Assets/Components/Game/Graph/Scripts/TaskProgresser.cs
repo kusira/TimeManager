@@ -365,6 +365,18 @@ namespace Components.Game.Graph.Scripts
             }
         }
 
+        public bool IsWorkerWorking(int workerIndex)
+        {
+            var worker = workers.Find(w => w.workerIndex == workerIndex);
+            return worker != null && worker.isWorking;
+        }
+
+        public bool AreAllTasksCompleted()
+        {
+            if (allTasks == null || allTasks.Count == 0) return false;
+            return allTasks.All(t => t.isCompleted);
+        }
+
         private void CheckWorkableStatus()
         {
             foreach (var task in allTasks)

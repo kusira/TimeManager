@@ -17,7 +17,7 @@ MonoBehaviour:
     vertices:
     - i: 0
       j: 0
-      taskCompletionTime: 5
+      taskCompletionTime: 10
     - i: 0
       j: 1
       taskCompletionTime: 5
