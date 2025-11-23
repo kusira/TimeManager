@@ -1,3 +1,4 @@
+using System.Collections; // 追加
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace Components.Game.Graph.Scripts
         [System.Serializable]
         public class TaskNode
         {
+            // ... (既存のフィールド)
             public int index;
             public float totalTime;
             public float currentTime;
@@ -31,8 +33,8 @@ namespace Components.Game.Graph.Scripts
             public Image maskImage; 
             
             public Vector3 maskInitialScale;
-            public Vector3 maskInitialPos; // To adjust position during scaling if pivot is center
-            public float maskHeight; // Original height to calculate offset
+            public Vector3 maskInitialPos; 
+            public float maskHeight; 
 
             // Edges
             public List<GameObject> outgoingEdges = new List<GameObject>();
@@ -49,6 +51,13 @@ namespace Components.Game.Graph.Scripts
             // Completion Animation
             public bool isAnimatingCompletion = false;
             public float completionAnimTime = 0f; 
+
+            // Bonus Animation
+            public float remainingTimeReduction = 0f; 
+            public float reductionSpeed = 0f; 
+            public bool isApplyingBonus = false;
+            public Color defaultMaskColor; 
+            public bool hasSavedColor = false;
         }
 
         [System.Serializable]
@@ -56,12 +65,46 @@ namespace Components.Game.Graph.Scripts
         {
             public string label; 
             public int workerIndex; 
+            public GameObject workerObject; 
+            public TMP_Text remainText; 
             public TaskNode currentTask;
             public bool isWorking;
+            public bool isUiShowing; // 追加: UIの表示目標状態
+            public Coroutine fadeCoroutine;
+            public Vector3 uiOriginalLocalPos;
+            public Vector3 uiInitialScale;
         }
 
         [SerializeField] private GraphGenerator GraphGenerator;
         
+        [System.Serializable]
+        public class WorkerGameObject
+        {
+            public string name;
+            public GameObject gameObject;
+        }
+
+        [Header("Worker References (Assign in Inspector)")]
+        [Tooltip("各Workerのゲームオブジェクトを割り当ててください")]
+        [SerializeField] private List<WorkerGameObject> workerObjects = new List<WorkerGameObject>
+        {
+            new WorkerGameObject { name = "Worker A" },
+            new WorkerGameObject { name = "Worker B" },
+            new WorkerGameObject { name = "Worker C" },
+            new WorkerGameObject { name = "Worker D" },
+            new WorkerGameObject { name = "Worker E" }
+        };
+
+        [Header("UI Animation Settings")]
+        [SerializeField] private float textFadeDuration = 0.1f;
+        [SerializeField] private float textWaitDuration = 0.1f; // 追加
+        [SerializeField] private float uiAnimationOffset = 0.3f;
+
+        [Header("Bonus Animation Settings")]
+        [SerializeField] private float bonusAnimDuration = 0.15f;
+        [SerializeField] private Color bonusMaskColor = new Color(1f, 1f, 0.5f); // 少し黄色
+
+        [Header("Debug Info (デバッグ用)")]
         [SerializeField] private List<TaskNode> allTasks = new List<TaskNode>();
         [SerializeField] private List<Worker> workers = new List<Worker>();
 
@@ -86,9 +129,150 @@ namespace Components.Game.Graph.Scripts
             foreach (var worker in workers)
             {
                 ProcessWorker(worker);
+                UpdateWorkerUI(worker); // UI更新を追加
             }
 
             UpdateVisualization();
+        }
+
+        private void UpdateWorkerUI(Worker worker)
+        {
+            if (worker.remainText == null) return;
+
+            bool shouldShow = worker.isWorking && worker.currentTask != null;
+
+            // 目標状態が変わったらアニメーション開始
+            if (shouldShow != worker.isUiShowing)
+            {
+                worker.isUiShowing = shouldShow;
+                if (worker.fadeCoroutine != null) StopCoroutine(worker.fadeCoroutine);
+
+                if (shouldShow)
+                {
+                    worker.fadeCoroutine = StartCoroutine(ShowWorkerUISequence(worker));
+                }
+                else
+                {
+                    worker.fadeCoroutine = StartCoroutine(HideWorkerUISequence(worker));
+                }
+            }
+            
+            // テキスト更新（表示中の場合）
+            if (shouldShow)
+            {
+                float remaining = Mathf.Max(0f, worker.currentTask.totalTime - worker.currentTask.currentTime);
+                worker.remainText.text = remaining.ToString("F1");
+            }
+        }
+
+        // 表示シーケンス: (FadeOut -> Wait) -> FadeIn
+        private IEnumerator ShowWorkerUISequence(Worker worker)
+        {
+            if (worker.remainText == null) yield break;
+
+            // CanvasGroupは使用しない
+            float currentAlpha = worker.remainText.color.a;
+
+            // 既に表示中あるいはフェードアウト中の場合、一度完全にフェードアウトさせる
+            // Alpha > 0.01f なら "残像" があるとみなして、消去アニメーション + 待機 を入れる
+            if (worker.remainText.gameObject.activeSelf && currentAlpha > 0.01f)
+            {
+                // 下へフェードアウト
+                yield return AnimateAlphaPos(worker, currentAlpha, 0f, worker.remainText.transform.localPosition, worker.uiOriginalLocalPos - Vector3.up * uiAnimationOffset, textFadeDuration);
+                
+                // 待機
+                yield return new WaitForSeconds(textWaitDuration);
+            }
+
+            // 表示開始
+            worker.remainText.gameObject.SetActive(true);
+            
+            // 下から上へフェードイン
+            Vector3 startPos = worker.uiOriginalLocalPos - Vector3.up * uiAnimationOffset;
+            Vector3 endPos = worker.uiOriginalLocalPos;
+            
+            // 初期位置セット
+            worker.remainText.transform.localPosition = startPos;
+            worker.remainText.transform.localScale = worker.uiInitialScale;
+            
+            // Alpha初期化
+            SetComponentsAlpha(worker, 0f);
+
+            yield return AnimateAlphaPos(worker, 0f, 1f, startPos, endPos, textFadeDuration);
+            
+            worker.fadeCoroutine = null;
+        }
+
+        // 非表示シーケンス: FadeOut Only
+        private IEnumerator HideWorkerUISequence(Worker worker)
+        {
+            if (worker.remainText == null) yield break;
+            if (!worker.remainText.gameObject.activeSelf) yield break;
+
+            float currentAlpha = worker.remainText.color.a;
+
+            // 下へフェードアウト
+            Vector3 startPos = worker.remainText.transform.localPosition;
+            Vector3 endPos = worker.uiOriginalLocalPos - Vector3.up * uiAnimationOffset;
+            
+            yield return AnimateAlphaPos(worker, currentAlpha, 0f, startPos, endPos, textFadeDuration);
+            
+            worker.remainText.gameObject.SetActive(false);
+            worker.fadeCoroutine = null;
+        }
+
+        // 汎用アニメーションコルーチン
+        private IEnumerator AnimateAlphaPos(Worker worker, float startAlpha, float endAlpha, Vector3 startPos, Vector3 endPos, float duration)
+        {
+             Transform target = worker.remainText.transform;
+             
+             // コンポーネント取得
+             List<TMP_Text> texts = new List<TMP_Text>();
+             List<SpriteRenderer> sprites = new List<SpriteRenderer>();
+             List<Image> images = new List<Image>();
+             
+             worker.remainText.GetComponentsInChildren<TMP_Text>(true, texts);
+             worker.remainText.GetComponentsInChildren<SpriteRenderer>(true, sprites);
+             worker.remainText.GetComponentsInChildren<Image>(true, images);
+
+             float timer = 0f;
+             while (timer < duration)
+             {
+                 timer += Time.deltaTime;
+                 float t = Mathf.Clamp01(timer / duration);
+                 float easeT = -(Mathf.Cos(Mathf.PI * t) - 1f) / 2f; // EaseInOutSine
+
+                 float currentAlpha = Mathf.Lerp(startAlpha, endAlpha, easeT);
+                 
+                 // Apply Alpha
+                 foreach(var txt in texts) { Color c = txt.color; c.a = currentAlpha; txt.color = c; }
+                 foreach(var spr in sprites) { Color c = spr.color; c.a = currentAlpha; spr.color = c; }
+                 foreach(var img in images) { Color c = img.color; c.a = currentAlpha; img.color = c; }
+
+                 target.localPosition = Vector3.Lerp(startPos, endPos, easeT);
+                 target.localScale = worker.uiInitialScale;
+                 yield return null;
+             }
+             
+             // Ensure end alpha
+             foreach(var txt in texts) { Color c = txt.color; c.a = endAlpha; txt.color = c; }
+             foreach(var spr in sprites) { Color c = spr.color; c.a = endAlpha; spr.color = c; }
+             foreach(var img in images) { Color c = img.color; c.a = endAlpha; img.color = c; }
+
+             target.localPosition = endPos;
+             target.localScale = worker.uiInitialScale;
+        }
+
+        private void SetComponentsAlpha(Worker worker, float alpha)
+        {
+             if (worker.remainText == null) return;
+             var texts = worker.remainText.GetComponentsInChildren<TMP_Text>(true);
+             var sprites = worker.remainText.GetComponentsInChildren<SpriteRenderer>(true);
+             var images = worker.remainText.GetComponentsInChildren<Image>(true);
+             
+             foreach(var txt in texts) { Color c = txt.color; c.a = alpha; txt.color = c; }
+             foreach(var spr in sprites) { Color c = spr.color; c.a = alpha; spr.color = c; }
+             foreach(var img in images) { Color c = img.color; c.a = alpha; img.color = c; }
         }
 
         public void Initialize()
@@ -158,56 +342,19 @@ namespace Components.Game.Graph.Scripts
                         task.maskRenderer = mask.GetComponent<SpriteRenderer>();
                         task.maskImage = mask.GetComponent<Image>();
                         
+                        // Save default color
+                        if (task.maskRenderer != null)
+                        {
+                            task.defaultMaskColor = task.maskRenderer.color;
+                            task.hasSavedColor = true;
+                        }
+                        else if (task.maskImage != null)
+                        {
+                            task.defaultMaskColor = task.maskImage.color;
+                            task.hasSavedColor = true;
+                        }
+
                         // Calculate Height for Pivot Simulation
-                        // If Pivot is Center (default), scaling Y shrinks from both top and bottom.
-                        // To simulate Bottom Pivot (shrinking downwards to bottom), we need to move position DOWN as we shrink.
-                        // Wait, if we want it to be anchored at Bottom Center, and shrink Y:
-                        // Top should move down, Bottom should stay fixed.
-                        // Center = Bottom + Height/2.
-                        // New Center = Bottom + NewHeight/2.
-                        // Delta Center = (NewHeight - Height) / 2.
-                        // Since NewHeight < Height, Delta is negative (moves down).
-                        
-                        // NOTE: User request "黒マスクのbottom centerを基準としたい"
-                        // Usually masks are covering the content.
-                        // If it's a progress bar filling UP, the mask should shrink from TOP to BOTTOM?
-                        // Or shrink from Bottom to Top?
-                        // "逆方向に動かして" implies revealing.
-                        // If content is static, Mask covers it.
-                        // To reveal from bottom up: Mask Top moves up? No.
-                        // Mask Bottom moves up? Revealing bottom.
-                        // That means Mask is anchored at TOP?
-                        // If mask is anchored at Bottom, scaling Y means top comes down. This reveals Top.
-                        // Usually fill amounts go from Bottom to Top.
-                        // So we want to REVEAL from Bottom to Top.
-                        // This means the Mask should shrink upwards (Bottom moves up)?
-                        // OR Mask moves/shrinks such that bottom part becomes visible first.
-                        // If Mask is on top, and we shrink Y:
-                        // If Pivot is Bottom: Top comes down. Bottom stays. -> Reveals Top (if background is white).
-                        // If Pivot is Top: Bottom goes up. Top stays. -> Reveals Bottom.
-                        
-                        // User said "bottom centerを基準としたい".
-                        // This literally means pivot is at Bottom Center.
-                        // If we shrink scale Y with Bottom Pivot: The Top edge comes down. The Bottom edge stays fixed.
-                        // This visual effect is: The bar shrinks downwards.
-                        // This reveals whatever is *above* the mask? Or if the mask *is* the bar?
-                        // "GaugeMask...黒いマスク...上下させることで進捗...逆方向に"
-                        // If it's a mask covering the "filled" state.
-                        // We want to reveal the fill from bottom to top (standard fill).
-                        // So the Mask needs to disappear from bottom to top.
-                        // This means Mask Bottom edge moves UP.
-                        // This implies Mask Pivot should be TOP. (Shrinking Y pulls bottom up).
-                        // BUT user explicitly asked "bottom centerを基準としたい".
-                        // Maybe the Mask *IS* the fill? "GaugeMask...黒いマスク". Usually implies it blocks view.
-                        // If it's a mask, and pivot is Bottom: It shrinks down.
-                        // This means the top part becomes empty (revealed?).
-                        // If the underlying sprite is the "Empty" state and Mask is "Fill"? No, "Mask" usually hides "Fill".
-                        
-                        // Let's assume user knows what they want: Pivot at Bottom Center.
-                        // Behavior: Scale Y shrinks -> Top comes down.
-                        // I will implement Pivot simulation for Bottom Center.
-                        // Delta Pos = (NewScale.y - InitialScale.y) * Height / 2 (If localScale=1 is Height)
-                        
                         RectTransform rt = mask.GetComponent<RectTransform>();
                         if (rt != null)
                         {
@@ -216,10 +363,6 @@ namespace Components.Game.Graph.Scripts
                         else
                         {
                             SpriteRenderer sr = mask.GetComponent<SpriteRenderer>();
-                            if (sr != null) task.maskHeight = sr.bounds.size.y; // Bounds size in world? Need local.
-                            // For Sprite, local bounds size Y * localScale.y is effective height.
-                            // Let's use Sprite.bounds.size.y / transform.lossyScale.y to get unscaled local size?
-                            // Simplified: task.maskHeight = sr.sprite.bounds.size.y;
                             if (sr != null && sr.sprite != null)
                                 task.maskHeight = sr.sprite.bounds.size.y;
                             else
@@ -235,12 +378,55 @@ namespace Components.Game.Graph.Scripts
             foreach(int idx in requiredWorkerIndices)
             {
                 string label = ((char)('A' + idx)).ToString();
+                GameObject wObj = null;
+                TMP_Text rText = null;
+                Vector3 originalPos = Vector3.zero;
+
+                if (idx < workerObjects.Count)
+                {
+                    wObj = workerObjects[idx].gameObject;
+                    if (wObj != null)
+                    {
+                        Transform uiTrans = wObj.transform.Find("UI");
+                        if (uiTrans != null)
+                        {
+                            Transform textTrans = uiTrans.Find("RemainText");
+                            if (textTrans != null)
+                            {
+                                rText = textTrans.GetComponent<TMP_Text>();
+                            }
+                        }
+                        // フォールバック検索
+                        if (rText == null)
+                        {
+                            var texts = wObj.GetComponentsInChildren<TMP_Text>(true);
+                            foreach (var t in texts)
+                            {
+                                if (t.name == "RemainText")
+                                {
+                                    rText = t;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (rText != null)
+                {
+                    originalPos = rText.transform.localPosition;
+                }
+
                 workers.Add(new Worker
                 {
                     label = label,
                     workerIndex = idx,
+                    workerObject = wObj,
+                    remainText = rText,
                     isWorking = false,
-                    currentTask = null
+                    currentTask = null,
+                    uiOriginalLocalPos = originalPos,
+                    uiInitialScale = rText != null ? rText.transform.localScale : Vector3.one // スケール保存
                 });
             }
             workers.Sort((a, b) => a.workerIndex.CompareTo(b.workerIndex));
@@ -276,8 +462,7 @@ namespace Components.Game.Graph.Scripts
             foreach(var t in allTasks) 
             {
                 t.currentMaskAlpha = t.targetMaskAlpha;
-                if(t.spriteRenderer != null) { var c=t.spriteRenderer.color; c.a=1f; t.spriteRenderer.color=c; }
-                if(t.uiImage != null) { var c=t.uiImage.color; c.a=1f; t.uiImage.color=c; }
+                ApplyMaskAlpha(t, t.currentMaskAlpha); // 初期化時に色も戻す
             }
             UpdateVisualsImmediate(); 
         }
@@ -288,6 +473,27 @@ namespace Components.Game.Graph.Scripts
             {
                 if (worker.currentTask != null)
                 {
+                    // ボーナス時間の加算処理
+                    if (worker.currentTask.remainingTimeReduction > 0)
+                    {
+                        worker.currentTask.isApplyingBonus = true;
+                        float amount = worker.currentTask.reductionSpeed * Time.deltaTime;
+                        
+                        // 残りを超えないように
+                        if (amount > worker.currentTask.remainingTimeReduction)
+                        {
+                            amount = worker.currentTask.remainingTimeReduction;
+                        }
+                        
+                        worker.currentTask.currentTime += amount;
+                        worker.currentTask.remainingTimeReduction -= amount;
+                    }
+                    else
+                    {
+                        worker.currentTask.isApplyingBonus = false;
+                    }
+
+                    // 通常時間の加算
                     worker.currentTask.currentTime += Time.deltaTime;
                     
                     if (worker.currentTask.currentTime >= worker.currentTask.totalTime)
@@ -335,6 +541,10 @@ namespace Components.Game.Graph.Scripts
                 worker.currentTask.isCompleted = true;
                 worker.currentTask.currentTime = worker.currentTask.totalTime; 
                 
+                // ボーナス処理も終了
+                worker.currentTask.remainingTimeReduction = 0f;
+                worker.currentTask.isApplyingBonus = false;
+
                 worker.currentTask.isAnimatingCompletion = true;
                 worker.currentTask.completionAnimTime = 0f;
 
@@ -350,19 +560,67 @@ namespace Components.Game.Graph.Scripts
             var worker = workers.Find(w => w.workerIndex == workerIndex);
             if (worker != null && worker.isWorking && worker.currentTask != null)
             {
-                worker.currentTask.currentTime += timeReduction;
-
-                if (worker.currentTask.currentTime >= worker.currentTask.totalTime)
-                {
-                    // Handled in Update
-                }
+                // 即時加算ではなく、残り時間に積む
+                worker.currentTask.remainingTimeReduction += timeReduction;
                 
-                Debug.Log($"Reduced time for Worker {worker.label} by {timeReduction}. Current: {worker.currentTask.currentTime}/{worker.currentTask.totalTime}");
+                // 速度を計算（0.15秒で消化、既に加算中なら再計算）
+                // 単純に固定時間で消化する場合、残量が増えると速度が上がる
+                worker.currentTask.reductionSpeed = worker.currentTask.remainingTimeReduction / bonusAnimDuration;
+                
+                Debug.Log($"Bonus added for Worker {worker.label}. Amount: {timeReduction}, New Remaining: {worker.currentTask.remainingTimeReduction}");
             }
             else
             {
                 Debug.Log($"Worker {workerIndex} is not currently working on a task.");
             }
+        }
+
+        public bool IsWorkerWorking(int workerIndex)
+        {
+            var worker = workers.Find(w => w.workerIndex == workerIndex);
+            return worker != null && worker.isWorking;
+        }
+
+        public bool AreAllTasksCompleted()
+        {
+            if (allTasks == null || allTasks.Count == 0) return false;
+            return allTasks.All(t => t.isCompleted);
+        }
+
+        // TaskQueueMover用に、指定したWorkerのタスク一覧（未完了のみ）を取得する
+        public List<TaskNode> GetWorkerTasks(int workerIndex)
+        {
+            List<TaskNode> tasks = new List<TaskNode>();
+            foreach (var task in allTasks)
+            {
+                if (task.assignedWorkerIndex == workerIndex && !task.isCompleted)
+                {
+                    tasks.Add(task);
+                }
+            }
+            // タスクIndex順にソート（必要なら）
+            tasks.Sort((a, b) => a.index.CompareTo(b.index));
+            return tasks;
+        }
+
+        // 現在進行中のタスクの残り時間を取得する
+        public float GetWorkerCurrentTaskRemainingTime(int workerIndex)
+        {
+            var worker = workers.Find(w => w.workerIndex == workerIndex);
+            if (worker != null && worker.isWorking && worker.currentTask != null)
+            {
+                return Mathf.Max(0f, worker.currentTask.totalTime - worker.currentTask.currentTime);
+            }
+            return 0f;
+        }
+
+        public GameObject GetWorkerGameObject(int workerIndex)
+        {
+            if (workerObjects != null && workerIndex >= 0 && workerIndex < workerObjects.Count)
+            {
+                return workerObjects[workerIndex].gameObject;
+            }
+            return null;
         }
 
         private void CheckWorkableStatus()
@@ -448,9 +706,6 @@ namespace Components.Game.Graph.Scripts
                         task.gaugeMask.localScale = newScale;
 
                         // Position adjustment for Bottom Pivot
-                        // Center moves DOWN by half the scale difference
-                        // DeltaScaleY = currentScaleY - initialScaleY (negative)
-                        // Shift Y = DeltaScaleY * Height / 2
                         float deltaY = (currentScaleY - task.maskInitialScale.y) * task.maskHeight * 0.5f;
                         
                         Vector3 newPos = task.maskInitialPos;
@@ -463,17 +718,23 @@ namespace Components.Game.Graph.Scripts
 
         private void ApplyMaskAlpha(TaskNode task, float alpha)
         {
+            Color targetColor = task.hasSavedColor ? task.defaultMaskColor : Color.black;
+            
+            // ボーナス適用中なら黄色くする
+            if (task.isApplyingBonus)
+            {
+                targetColor = bonusMaskColor;
+            }
+
+            targetColor.a = alpha;
+
             if (task.maskRenderer != null)
             {
-                Color c = task.maskRenderer.color;
-                c.a = alpha;
-                task.maskRenderer.color = c;
+                task.maskRenderer.color = targetColor;
             }
             else if (task.maskImage != null)
             {
-                Color c = task.maskImage.color;
-                c.a = alpha;
-                task.maskImage.color = c;
+                task.maskImage.color = targetColor;
             }
         }
 

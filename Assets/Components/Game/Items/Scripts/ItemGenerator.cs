@@ -20,7 +20,7 @@ namespace Components.Game.Items.Scripts
         [SerializeField] private int currentStageIndex = 0;
         
         // インスペクタからの直接入力を防ぐため SerializeField を削除
-        private List<string> itemIds = new List<string>();
+        private List<StageDatabase.StageItemData> stageItems = new List<StageDatabase.StageItemData>();
 
         void Start()
         {
@@ -35,8 +35,8 @@ namespace Components.Game.Items.Scripts
                 var stageData = stageDatabase.GetStageData(currentStageIndex);
                 if (stageData != null)
                 {
-                    this.itemIds = new List<string>(stageData.itemIds);
-                    Debug.Log($"Loaded Stage Data for Items: {stageData.stageName} (Items: {itemIds.Count})");
+                    this.stageItems = new List<StageDatabase.StageItemData>(stageData.stageItems);
+                    Debug.Log($"Loaded Stage Data for Items: {stageData.stageName} (Items: {stageItems.Count})");
                 }
             }
         }
@@ -82,12 +82,14 @@ namespace Components.Game.Items.Scripts
             // 実装: 中心を基準に並べる (Centered) のが見栄えが良いことが多いので、
             // 全体の幅 (N-1)*Spacing を計算し、-Width/2 から開始します。
 
-            float totalWidth = (itemIds.Count - 1) * spacingX;
+            float totalWidth = (stageItems.Count - 1) * spacingX;
             float startX = -totalWidth / 2.0f;
 
-            for (int i = 0; i < itemIds.Count; i++)
+            for (int i = 0; i < stageItems.Count; i++)
             {
-                string itemId = itemIds[i];
+                var itemData = stageItems[i];
+                string itemId = itemData.itemId;
+                int count = itemData.count;
                 
                 GameObject itemObj = Instantiate(itemPrefab, itemParent);
                 itemObj.name = $"Item_{i}_{itemId}";
@@ -100,7 +102,7 @@ namespace Components.Game.Items.Scripts
                 var assigner = itemObj.GetComponent<ItemAssigner>();
                 if (assigner != null)
                 {
-                    assigner.AssignItem(itemId);
+                    assigner.AssignItem(itemId, count);
                 }
                 else
                 {
@@ -110,4 +112,3 @@ namespace Components.Game.Items.Scripts
         }
     }
 }
-

@@ -10,57 +10,107 @@ namespace Components.Game.Items.Scripts
         [Tooltip("初期化時にアサインするアイテムID")]
         [SerializeField] private string initialItemId;
 
-        [Header("UI References (Assign in Inspector)")]
-        [Tooltip("ItemHolder (SpriteRenderer component)")]
+        [Tooltip("初期個数")]
+        [SerializeField] private int initialCount = 1;
+
+        [Header("UI 参照 (インスペクターで割り当て)")]
+        [Tooltip("ItemHolder（SpriteRenderer コンポーネント）")]
         [SerializeField] private SpriteRenderer itemHolder;
-        [Tooltip("ItemText (TMP_Text component)")]
-        [SerializeField] private TMP_Text itemText;
+        
+        [Tooltip("ItemText（TMP_Text コンポーネントを持つゲームオブジェクト、または TMP_Text そのもの）")]
+        [SerializeField] private GameObject itemTextObject; // TMP_Text から GameObject へ変更
+        private TMP_Text itemText;
+
+        [Tooltip("CountText（TMP_Text コンポーネントを持つゲームオブジェクト、または TMP_Text そのもの）")]
+        [SerializeField] private GameObject countTextObject; // TMP_Text から GameObject へ変更
+        private TMP_Text countText;
 
         // 外部公開プロパティ
         public ItemDatabase Database => itemDatabase;
         public string CurrentItemId { get; private set; }
+        public int CurrentCount { get; private set; }
+
+        private void Awake()
+        {
+            // Resolve TMP components from GameObjects if assigned
+            if (itemTextObject != null)
+            {
+                itemText = itemTextObject.GetComponent<TMP_Text>();
+                if (itemText == null) Debug.LogWarning("ItemTextObject assigned but no TMP_Text component found.");
+            }
+
+            if (countTextObject != null)
+            {
+                countText = countTextObject.GetComponent<TMP_Text>();
+                if (countText == null) Debug.LogWarning("CountTextObject assigned but no TMP_Text component found.");
+            }
+        }
 
         private void Start()
         {
             if (!string.IsNullOrEmpty(initialItemId))
             {
-                AssignItem(initialItemId);
+                AssignItem(initialItemId, initialCount);
             }
         }
 
         /// <summary>
-        /// IDを指定してアイテムを適用する
+        /// IDと個数を指定してアイテムを適用する
         /// </summary>
         /// <param name="itemId">アイテムのID</param>
-        public void AssignItem(string itemId)
+        /// <param name="count">アイテムの個数</param>
+        public void AssignItem(string itemId, int count)
         {
             CurrentItemId = itemId;
+            CurrentCount = count;
 
+            UpdateVisuals();
+        }
+
+        /// <summary>
+        /// アイテムの個数を減らす
+        /// </summary>
+        /// <returns>残り個数</returns>
+        public int DecrementCount()
+        {
+            CurrentCount--;
+            UpdateVisuals();
+            return CurrentCount;
+        }
+
+        private void UpdateVisuals()
+        {
             if (itemDatabase == null)
             {
                 Debug.LogError("ItemDatabase is not assigned in ItemAssigner.");
                 return;
             }
 
-            var itemData = itemDatabase.GetItem(itemId);
+            var itemData = itemDatabase.GetItem(CurrentItemId);
             if (itemData != null)
             {
                 if (itemHolder != null)
                 {
                     itemHolder.sprite = itemData.icon;
-                    // 画像がない場合は透明にするなどの処理が必要なら記述
                     itemHolder.enabled = (itemData.icon != null);
                 }
 
                 if (itemText != null)
                 {
                     // "+<数値>" の形式で表示
-                    itemText.text = "+" + itemData.timeReduction.ToString();
+                    itemText.text = "-" + itemData.timeReduction.ToString();
+                }
+
+                if (countText != null)
+                {
+                    // "x<個数>" の形式で表示
+                    countText.text = "x" + CurrentCount.ToString();
                 }
             }
             else
             {
-                Debug.LogWarning($"Item with ID '{itemId}' not found in database.");
+                // データがない場合などの処理
+                if(CurrentItemId != null) Debug.LogWarning($"Item with ID '{CurrentItemId}' not found in database.");
             }
         }
     }

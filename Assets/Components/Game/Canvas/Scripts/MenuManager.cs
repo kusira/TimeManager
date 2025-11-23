@@ -33,6 +33,17 @@ namespace Components.Game.Canvas.Scripts
                 {
                     backgroundCanvasGroup = blackGround.AddComponent<CanvasGroup>();
                 }
+
+                // BlackGroundクリック時に閉じる処理を追加
+                Button bgButton = blackGround.GetComponent<Button>();
+                if (bgButton == null)
+                {
+                    bgButton = blackGround.AddComponent<Button>();
+                    // ボタンの遷移アニメーションを無効化（背景なので）
+                    bgButton.transition = Selectable.Transition.None;
+                }
+                bgButton.onClick.RemoveAllListeners();
+                bgButton.onClick.AddListener(CloseMenu);
             }
 
             if (menuPanel != null)

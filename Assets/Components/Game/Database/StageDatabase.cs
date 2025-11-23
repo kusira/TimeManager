@@ -17,7 +17,15 @@ namespace Components.Game
             public List<GraphGenerator.EdgeData> edges = new List<GraphGenerator.EdgeData>();
             
             [Header("Item Data")]
-            public List<string> itemIds = new List<string>();
+            // public List<string> itemIds = new List<string>();
+            public List<StageItemData> stageItems = new List<StageItemData>();
+        }
+
+        [System.Serializable]
+        public class StageItemData
+        {
+            public string itemId;
+            public int count = 1;
         }
 
         [SerializeField] private List<StageData> stages = new List<StageData>();
