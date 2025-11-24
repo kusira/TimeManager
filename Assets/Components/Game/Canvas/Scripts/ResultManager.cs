@@ -42,6 +42,10 @@ namespace Components.Game.Canvas.Scripts
         [Tooltip("ボタン間のX軸間隔")]
         [SerializeField] private float buttonSpacingX = 150f;
 
+        [Header("Audio")]
+        [Tooltip("AudioSource (nullの場合は自動で探すかAddします)")]
+        [SerializeField] private AudioSource audioSource;
+
         [Header("Animation Settings")]
         [Tooltip("リザルト表示フェード時間")]
         [SerializeField] private float fadeDuration = 0.5f;
@@ -83,6 +87,7 @@ namespace Components.Game.Canvas.Scripts
 
             if (fadeManager == null) fadeManager = FindFirstObjectByType<FadeManager>();
             if (stageManager == null) stageManager = FindFirstObjectByType<StageManager>();
+            if (audioSource == null) audioSource = GetComponent<AudioSource>();
         }
 
         public void ShowGameClear()
@@ -218,6 +223,7 @@ namespace Components.Game.Canvas.Scripts
 
             UnityEngine.Events.UnityAction homeAction = () => 
             {
+                if (audioSource != null && audioSource.clip != null) audioSource.PlayOneShot(audioSource.clip);
                 Time.timeScale = 1f;
                 if (fadeManager != null) fadeManager.FadeOutAndLoadScene(homeSceneName);
                 else SceneManager.LoadScene(homeSceneName);
@@ -226,6 +232,7 @@ namespace Components.Game.Canvas.Scripts
 
             UnityEngine.Events.UnityAction replayAction = () => 
             {
+                if (audioSource != null && audioSource.clip != null) audioSource.PlayOneShot(audioSource.clip);
                 Time.timeScale = 1f;
 
                 // リプレイ時は現在のステージインデックスを維持する
@@ -245,6 +252,7 @@ namespace Components.Game.Canvas.Scripts
             {
                 UnityEngine.Events.UnityAction nextAction = () => 
                 {
+                    if (audioSource != null && audioSource.clip != null) audioSource.PlayOneShot(audioSource.clip);
                     Time.timeScale = 1f;
                     if (stageManager != null) stageManager.PrepareNextStage();
                     

@@ -17,6 +17,10 @@ namespace Components.Game.Items.Scripts
         [Tooltip("ホバーアニメーションの時間")]
         [SerializeField] private float hoverAnimDuration = 0.3f;
 
+        [Header("Audio")]
+        [Tooltip("AudioSource (nullの場合は自動で探すかAddします)")]
+        [SerializeField] private AudioSource audioSource;
+
         private ItemAssigner itemAssigner;
         private Vector3 startPosition;
         private Vector3 initialScale;
@@ -275,6 +279,12 @@ namespace Components.Game.Items.Scripts
             // 効果適用（実際に減らすのはここではなく、アニメーション開始前か、確定時）
             ApplyItemToWorker(workerIndex);
 
+            // SE再生
+            if (audioSource != null && audioSource.clip != null)
+            {
+                audioSource.PlayOneShot(audioSource.clip);
+            }
+
             // アニメーション対象は draggingObject
             GameObject targetObj = draggingObject;
 
@@ -312,6 +322,15 @@ namespace Components.Game.Items.Scripts
                     targetObj.transform.localScale = Vector3.Lerp(midScale, endScale, t);
                     yield return null;
                 }
+
+                // 透明にして待機
+                var renderers = targetObj.GetComponentsInChildren<Renderer>();
+                foreach (var r in renderers) r.enabled = false;
+                var graphics = targetObj.GetComponentsInChildren<UnityEngine.UI.Graphic>();
+                foreach (var g in graphics) g.enabled = false;
+
+                yield return new WaitForSeconds(0.3f);
+
                 Destroy(targetObj);
 
                 // 本体は変更なし（位置もそのまま）
@@ -345,6 +364,15 @@ namespace Components.Game.Items.Scripts
                         targetObj.transform.localScale = Vector3.Lerp(midScale, endScale, t);
                         yield return null;
                     }
+
+                    // 透明にして待機
+                    var renderers = targetObj.GetComponentsInChildren<Renderer>();
+                    foreach (var r in renderers) r.enabled = false;
+                    var graphics = targetObj.GetComponentsInChildren<UnityEngine.UI.Graphic>();
+                    foreach (var g in graphics) g.enabled = false;
+
+                    yield return new WaitForSeconds(0.3f);
+
                     Destroy(targetObj);
                 }
             }

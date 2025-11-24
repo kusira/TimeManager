@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Components.Game.Canvas.Scripts
 {
-    public class MenuManager : MonoBehaviour
+    public class MenuButtonManager : MonoBehaviour
     {
         [Header("UI References")]
         [SerializeField] private Button menuButton;
@@ -16,6 +16,10 @@ namespace Components.Game.Canvas.Scripts
         [SerializeField] private float animationDuration = 0.3f;
         [Tooltip("パネルのアニメーション移動距離")]
         [SerializeField] private float slideDistance = 50f;
+
+        [Header("Audio")]
+        [Tooltip("AudioSource (nullの場合は自動で探すかAddします)")]
+        [SerializeField] private AudioSource audioSource;
 
         private CanvasGroup backgroundCanvasGroup;
         private CanvasGroup panelCanvasGroup;
@@ -54,6 +58,16 @@ namespace Components.Game.Canvas.Scripts
                     panelCanvasGroup = menuPanel.gameObject.AddComponent<CanvasGroup>();
                 }
                 panelOriginalPos = menuPanel.localPosition;
+
+                // MenuPanel自体をクリックしても閉じないようにする対策
+                // MenuPanelにインタラクティブなコンポーネントがないと、親のBlackGround(Button)が反応してしまう場合があるため
+                // ダミーのButtonをつけてクリックイベントをここで消費させる
+                if (menuPanel.GetComponent<Selectable>() == null)
+                {
+                    var dummyBtn = menuPanel.gameObject.AddComponent<Button>();
+                    dummyBtn.transition = Selectable.Transition.None;
+                    // onClickには何も登録しないことで、イベントを吸い取る
+                }
             }
 
             // Initial state: BlackGround inactive
@@ -72,11 +86,27 @@ namespace Components.Game.Canvas.Scripts
             {
                 closeButton.onClick.AddListener(CloseMenu);
             }
+
+            if (audioSource == null)
+            {
+                audioSource = GetComponent<AudioSource>();
+            }
+        }
+
+        private void PlaySE()
+        {
+            if (audioSource != null && audioSource.clip != null)
+            {
+                audioSource.PlayOneShot(audioSource.clip);
+            }
         }
 
         private void OpenMenu()
         {
             if (isMenuOpen) return;
+            
+            PlaySE();
+
             isMenuOpen = true;
 
             previousTimeScale = Time.timeScale;
@@ -92,6 +122,9 @@ namespace Components.Game.Canvas.Scripts
         private void CloseMenu()
         {
             if (!isMenuOpen) return;
+
+            PlaySE();
+
             isMenuOpen = false;
 
             Time.timeScale = previousTimeScale;

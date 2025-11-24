@@ -5,7 +5,7 @@ using Components.Game; // StageManagerのため
 
 namespace Components.Game.Canvas.Scripts
 {
-    public class ReplayManager : MonoBehaviour
+    public class ReplayButton : MonoBehaviour
     {
         [Tooltip("リプレイボタンをアサインしてください")]
         [SerializeField] private Button replayButton;
@@ -15,6 +15,10 @@ namespace Components.Game.Canvas.Scripts
 
         [Tooltip("クリックしてからフェードアウト開始までの遅延時間 (秒)")]
         [SerializeField] private float clickDelay = 0f;
+
+        [Header("Audio")]
+        [Tooltip("AudioSource (nullの場合は自動で探すかAddします)")]
+        [SerializeField] private AudioSource audioSource;
 
         private void Start()
         {
@@ -28,10 +32,21 @@ namespace Components.Game.Canvas.Scripts
             {
                 replayButton.onClick.AddListener(OnReplayClicked);
             }
+
+            if (audioSource == null)
+            {
+                audioSource = GetComponent<AudioSource>();
+            }
         }
 
         private void OnReplayClicked()
         {
+            // SE再生
+            if (audioSource != null && audioSource.clip != null)
+            {
+                audioSource.PlayOneShot(audioSource.clip);
+            }
+
             // リプレイ時は現在のステージインデックスを維持する
             if (StageManager.Instance != null)
             {
@@ -52,4 +67,3 @@ namespace Components.Game.Canvas.Scripts
         }
     }
 }
-
