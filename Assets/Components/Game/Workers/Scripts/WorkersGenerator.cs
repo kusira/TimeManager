@@ -21,6 +21,9 @@ namespace Components.Game.Workers.Scripts
         [Tooltip("現在のステージ管理")]
         [SerializeField] private StageManager stageManager;
 
+        // 生成されたワーカーのリストを公開
+        public List<GameObject> GeneratedWorkers { get; private set; } = new List<GameObject>();
+
         private void Start()
         {
             // StageManagerがアサインされていない場合は探す
@@ -54,6 +57,22 @@ namespace Components.Game.Workers.Scripts
             AdjustScale(workerCount);
 
             // 生成
+            GeneratedWorkers.Clear();
+
+            // 破棄させる前にコルーチンを強制終了
+            StopAllCoroutines();
+            var taskProgresser = FindFirstObjectByType<Components.Game.Graph.Scripts.TaskProgresser>();
+            if (taskProgresser != null)
+            {
+                taskProgresser.StopAllCoroutines();
+            }
+
+            // 以前のWorkerが残っているかもしれないので、子オブジェクトをすべて破壊
+            foreach (Transform child in transform)
+            {
+                Destroy(child.gameObject);
+            }
+
             for (int i = 0; i < workerCount; i++)
             {
                 // プレハブリストの範囲内で循環させる、あるいはランダムにするなどの仕様が必要ですが、
@@ -63,12 +82,26 @@ namespace Components.Game.Workers.Scripts
                 GameObject prefab = workerPrefabs[i % workerPrefabs.Count];
                 GameObject worker = Instantiate(prefab, transform);
                 
+                // 生成されたワーカーの名前を設定（検索しやすくするため）
+                // WorkerA, WorkerB ... のように命名
+                worker.name = "Worker" + (char)('A' + i);
+
+                GeneratedWorkers.Add(worker);
+
+                // 位置設定
+                
                 // ワーカーの高さが verticalSpacing に近いと仮定した場合の「真ん中上」合わせです。
                 float topOffset = verticalSpacing * 0.5f;
                 
                 // リストの下に追加していくイメージで負方向
                 float posY = -i * verticalSpacing - topOffset;
                 worker.transform.localPosition = new Vector3(0f, posY, 0f);
+            }
+
+            // 生成したワーカーをTaskProgresserに渡す
+            if (taskProgresser != null)
+            {
+                taskProgresser.SetWorkers(GeneratedWorkers);
             }
         }
 

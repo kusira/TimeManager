@@ -22,6 +22,6 @@ MonoBehaviour:
   - id: monster
     icon: {fileID: -2055008003363216766, guid: be1224818ee32a8429d1bd9447e1d497, type: 3}
     timeReduction: 9
-  - id: caloriemate
+  - id: mate
     icon: {fileID: 705332171838204702, guid: 9a2fc23e86b79604a8548fed6b4a6d62, type: 3}
     timeReduction: 12

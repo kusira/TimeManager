@@ -115,54 +115,70 @@ namespace Components.Game.Graph.Scripts
         private const float AlphaTransitionSpeed = 1.0f / 0.3f; 
         private const float CompletionAnimDuration = 0.3f;
 
+        [SerializeField] private Components.Game.Workers.Scripts.WorkersGenerator workersGenerator;
+        
         private void Awake()
         {
-            AssignWorkerObjectsAutomatically();
+            // Awakeでの初期化は行わず、WorkersGeneratorからの供給を待つかStartで行う
         }
 
         private void Start()
         {
             if (resultManager == null) resultManager = FindFirstObjectByType<Components.Game.Canvas.Scripts.ResultManager>();
-            if (timeLimitManager == null) timeLimitManager = FindFirstObjectByType<Components.Game.Canvas.Scripts.TimeLimitManager>(); // 追加
-            // Auto initialize if possible
-            // Initialize(); 
-        }
-
-        private void AssignWorkerObjectsAutomatically()
-        {
-            // Workerリストが空、または要素数が足りない場合のためのフォールバック
-            // Inspectorで設定されている想定だが、動的確保も考慮
-            if (workerObjects == null) workerObjects = new List<WorkerGameObject>();
+            if (timeLimitManager == null) timeLimitManager = FindFirstObjectByType<Components.Game.Canvas.Scripts.TimeLimitManager>();
+            if (workersGenerator == null) workersGenerator = FindFirstObjectByType<Components.Game.Workers.Scripts.WorkersGenerator>();
             
-            // 5人分（A-E）確保
-            for (int i = workerObjects.Count; i < 5; i++)
+            // WorkersGeneratorと連携
+            if (workersGenerator != null)
             {
-                workerObjects.Add(new WorkerGameObject { name = "Worker " + (char)('A' + i) });
-            }
-
-            for (int i = 0; i < workerObjects.Count; i++)
-            {
-                // 既にアサインされていればスキップ
-                if (workerObjects[i].gameObject != null) continue;
-
-                char workerChar = (char)('A' + i);
-                // "WorkerA", "WorkerB" ... のパターンを検索
-                string targetName1 = "Worker" + workerChar; 
-                // "Worker A", "Worker B" ... のパターンも一応検索
-                string targetName2 = "Worker " + workerChar;
-
-                GameObject found = GameObject.Find(targetName1);
-                if (found == null) found = GameObject.Find(targetName2);
-
-                if (found != null)
+                // すでに生成済みなら受け取る
+                if (workersGenerator.GeneratedWorkers.Count > 0)
                 {
-                    workerObjects[i].gameObject = found;
+                    SetWorkers(workersGenerator.GeneratedWorkers);
+                }
+                else
+                {
+                    // まだなら生成を依頼（生成完了時にSetWorkersが呼ばれる）
+                    workersGenerator.GenerateWorkers();
                 }
             }
         }
 
+        // WorkersGeneratorから生成されたワーカーリストを受け取る
+        public void SetWorkers(List<GameObject> generatedWorkers)
+        {
+            workerObjects.Clear();
+            for (int i = 0; i < generatedWorkers.Count; i++)
+            {
+                // Worker A, Worker B ... のようにリストを再構築
+                workerObjects.Add(new WorkerGameObject 
+                { 
+                    name = "Worker " + (char)('A' + i),
+                    gameObject = generatedWorkers[i] 
+                });
+            }
+            
+            // リスト更新後に再初期化を促す
+            isInitialized = false;
+        }
+
+        // 外部から進行を停止させるためのフラグ
+        private bool isRunning = true;
+
+        public void StopProgress()
+        {
+            isRunning = false;
+        }
+
+        public void ResumeProgress()
+        {
+            isRunning = true;
+        }
+
         private void Update()
         {
+            if (!isRunning) return;
+
             if (!isInitialized)
             {
                 Initialize();
@@ -218,11 +234,15 @@ namespace Components.Game.Graph.Scripts
             if (worker.remainText == null) yield break;
 
             // CanvasGroupは使用しない
-            float currentAlpha = worker.remainText.color.a;
+            // Textコンポーネントが破棄されていないかチェック
+            if (worker.remainText == null) yield break;
+            float currentAlpha = 0f;
+            try { currentAlpha = worker.remainText.color.a; } catch { yield break; }
 
             // 既に表示中あるいはフェードアウト中の場合、一度完全にフェードアウトさせる
             // Alpha > 0.01f なら "残像" があるとみなして、消去アニメーション + 待機 を入れる
-            if (worker.remainText.gameObject.activeSelf && currentAlpha > 0.01f)
+            // gameObjectアクセス時のnullチェックも含む
+            if (worker.remainText != null && worker.remainText.gameObject.activeSelf && currentAlpha > 0.01f)
             {
                 // 下へフェードアウト
                 yield return AnimateAlphaPos(worker, currentAlpha, 0f, worker.remainText.transform.localPosition, worker.uiOriginalLocalPos - Vector3.up * uiAnimationOffset, textFadeDuration);
@@ -230,6 +250,8 @@ namespace Components.Game.Graph.Scripts
                 // 待機
                 yield return new WaitForSeconds(textWaitDuration);
             }
+
+            if (worker.remainText == null) yield break;
 
             // 表示開始
             worker.remainText.gameObject.SetActive(true);
@@ -254,7 +276,10 @@ namespace Components.Game.Graph.Scripts
         private IEnumerator HideWorkerUISequence(Worker worker)
         {
             if (worker.remainText == null) yield break;
-            if (!worker.remainText.gameObject.activeSelf) yield break;
+            
+            // gameObjectアクセス前にチェック
+            if (worker.remainText == null) yield break;
+            try { if (!worker.remainText.gameObject.activeSelf) yield break; } catch { yield break; }
 
             float currentAlpha = worker.remainText.color.a;
 
@@ -264,7 +289,10 @@ namespace Components.Game.Graph.Scripts
             
             yield return AnimateAlphaPos(worker, currentAlpha, 0f, startPos, endPos, textFadeDuration);
             
-            worker.remainText.gameObject.SetActive(false);
+            if (worker.remainText != null)
+            {
+                worker.remainText.gameObject.SetActive(false);
+            }
             worker.fadeCoroutine = null;
         }
 
@@ -278,23 +306,30 @@ namespace Components.Game.Graph.Scripts
              List<SpriteRenderer> sprites = new List<SpriteRenderer>();
              List<Image> images = new List<Image>();
              
-             worker.remainText.GetComponentsInChildren<TMP_Text>(true, texts);
-             worker.remainText.GetComponentsInChildren<SpriteRenderer>(true, sprites);
-             worker.remainText.GetComponentsInChildren<Image>(true, images);
+             if (worker.remainText != null)
+             {
+                 worker.remainText.GetComponentsInChildren<TMP_Text>(true, texts);
+                 worker.remainText.GetComponentsInChildren<SpriteRenderer>(true, sprites);
+                 worker.remainText.GetComponentsInChildren<Image>(true, images);
+             }
 
              float timer = 0f;
              while (timer < duration)
              {
                  timer += Time.deltaTime;
+                 
+                 // 途中でオブジェクトが破棄されていたら中断
+                 if (worker.remainText == null || target == null) yield break;
+
                  float t = Mathf.Clamp01(timer / duration);
                  float easeT = -(Mathf.Cos(Mathf.PI * t) - 1f) / 2f; // EaseInOutSine
 
                  float currentAlpha = Mathf.Lerp(startAlpha, endAlpha, easeT);
                  
                  // Apply Alpha
-                 foreach(var txt in texts) { Color c = txt.color; c.a = currentAlpha; txt.color = c; }
-                 foreach(var spr in sprites) { Color c = spr.color; c.a = currentAlpha; spr.color = c; }
-                 foreach(var img in images) { Color c = img.color; c.a = currentAlpha; img.color = c; }
+                 foreach(var txt in texts) { if (txt != null) { Color c = txt.color; c.a = currentAlpha; txt.color = c; } }
+                 foreach(var spr in sprites) { if (spr != null) { Color c = spr.color; c.a = currentAlpha; spr.color = c; } }
+                 foreach(var img in images) { if (img != null) { Color c = img.color; c.a = currentAlpha; img.color = c; } }
 
                  target.localPosition = Vector3.Lerp(startPos, endPos, easeT);
                  target.localScale = worker.uiInitialScale;
@@ -302,12 +337,15 @@ namespace Components.Game.Graph.Scripts
              }
              
              // Ensure end alpha
-             foreach(var txt in texts) { Color c = txt.color; c.a = endAlpha; txt.color = c; }
-             foreach(var spr in sprites) { Color c = spr.color; c.a = endAlpha; spr.color = c; }
-             foreach(var img in images) { Color c = img.color; c.a = endAlpha; img.color = c; }
+             if (worker.remainText != null && target != null)
+             {
+                 foreach(var txt in texts) { if (txt != null) { Color c = txt.color; c.a = endAlpha; txt.color = c; } }
+                 foreach(var spr in sprites) { if (spr != null) { Color c = spr.color; c.a = endAlpha; spr.color = c; } }
+                 foreach(var img in images) { if (img != null) { Color c = img.color; c.a = endAlpha; img.color = c; } }
 
-             target.localPosition = endPos;
-             target.localScale = worker.uiInitialScale;
+                 target.localPosition = endPos;
+                 target.localScale = worker.uiInitialScale;
+             }
         }
 
         private void SetComponentsAlpha(Worker worker, float alpha)
