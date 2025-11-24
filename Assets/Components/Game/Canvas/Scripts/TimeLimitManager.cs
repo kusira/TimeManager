@@ -36,6 +36,8 @@ namespace Components.Game.Canvas.Scripts
         // 外部から時間超過を知るためのイベント（必要なら使用）
         // public event System.Action OnTimeUp;
 
+        [SerializeField] private ResultManager resultManager;
+
         private void Awake()
         {
             InitializeGauge();
@@ -43,6 +45,8 @@ namespace Components.Game.Canvas.Scripts
 
         private void Start()
         {
+            if (resultManager == null) resultManager = FindFirstObjectByType<ResultManager>();
+
             // Awakeで初期化済みなのでここでは不要、ただし未初期化なら実行
             if (initialWidth <= 0) InitializeGauge();
 
@@ -121,8 +125,11 @@ namespace Components.Game.Canvas.Scripts
         private void OnTimeLimitExceeded()
         {
             Debug.Log("Time Limit Exceeded!");
-            // ゲームオーバー処理などをここに記述、またはイベント発火
-            // OnTimeUp?.Invoke();
+            
+            if (resultManager != null)
+            {
+                resultManager.ShowGameOver();
+            }
         }
     }
 }

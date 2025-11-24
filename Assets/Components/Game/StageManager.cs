@@ -23,8 +23,18 @@ namespace Components.Game
 
         public int CurrentStageIndex => currentStageIndex;
 
+        // 次のシーンロード時に適用するステージインデックス
+        private static int? PendingStageIndex = null;
+
         private void Awake()
         {
+            // PendingStageIndexがあれば適用
+            if (PendingStageIndex.HasValue)
+            {
+                currentStageIndex = PendingStageIndex.Value;
+                PendingStageIndex = null; // リセット
+            }
+
             // 自動で探す (アサインされていなければ)
             if (graphGenerator == null) graphGenerator = FindFirstObjectByType<GraphGenerator>();
             if (itemGenerator == null) itemGenerator = FindFirstObjectByType<ItemGenerator>();
@@ -72,6 +82,14 @@ namespace Components.Game
             currentStageIndex = index;
             ApplyStageIndex();
             UpdateUI();
+        }
+
+        /// <summary>
+        /// 次のステージを準備する（リロード後に適用される）
+        /// </summary>
+        public void PrepareNextStage()
+        {
+            PendingStageIndex = currentStageIndex + 1;
         }
     }
 }

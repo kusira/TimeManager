@@ -110,12 +110,17 @@ namespace Components.Game.Graph.Scripts
         [SerializeField] private List<TaskNode> allTasks = new List<TaskNode>();
         [SerializeField] private List<Worker> workers = new List<Worker>();
 
+        [SerializeField] private Components.Game.Canvas.Scripts.ResultManager resultManager;
+        [SerializeField] private Components.Game.Canvas.Scripts.TimeLimitManager timeLimitManager; // 追加
+
         private bool isInitialized = false;
         private const float AlphaTransitionSpeed = 1.0f / 0.3f; 
         private const float CompletionAnimDuration = 0.3f;
 
         private void Start()
         {
+            if (resultManager == null) resultManager = FindFirstObjectByType<Components.Game.Canvas.Scripts.ResultManager>();
+            if (timeLimitManager == null) timeLimitManager = FindFirstObjectByType<Components.Game.Canvas.Scripts.TimeLimitManager>(); // 追加
             // Auto initialize if possible
             // Initialize(); 
         }
@@ -567,6 +572,20 @@ namespace Components.Game.Graph.Scripts
                 worker.nextTaskTimer = nextTaskInterval; // インターバル設定
                 
                 CheckWorkableStatus(); 
+
+                if (AreAllTasksCompleted())
+                {
+                    // タイマー停止
+                    if (timeLimitManager != null)
+                    {
+                        timeLimitManager.StopTimer();
+                    }
+
+                    if (resultManager != null)
+                    {
+                        resultManager.ShowGameClear();
+                    }
+                }
             }
         }
 
