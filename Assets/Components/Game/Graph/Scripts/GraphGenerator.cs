@@ -40,6 +40,11 @@ namespace Components.Game.Graph.Scripts
         [Header("Graph Data")]
         [SerializeField] private Components.Game.StageDatabase stageDatabase;
         [SerializeField] private int currentStageIndex = 0;
+
+        public void SetStageIndex(int index)
+        {
+            currentStageIndex = index;
+        }
         
         // インスペクタからの直接入力を防ぐため SerializeField を削除
         private List<VertexData> vertices = new List<VertexData>();

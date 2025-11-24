@@ -53,38 +53,4 @@ MonoBehaviour:
       count: 3
     - itemId: monster
       count: 1
-  - stageName: stage1
-    vertices:
-    - i: 0
-      j: 0
-      taskCompletionTime: 10
-    - i: 0
-      j: 1
-      taskCompletionTime: 5
-    - i: 0
-      j: 2
-      taskCompletionTime: 10
-    - i: 1
-      j: 0
-      taskCompletionTime: 5
-    - i: 1
-      j: 1
-      taskCompletionTime: 10
-    edges:
-    - fromIndex: 0
-      toIndex: 1
-    - fromIndex: 0
-      toIndex: 4
-    - fromIndex: 1
-      toIndex: 2
-    - fromIndex: 3
-      toIndex: 4
-    - fromIndex: 4
-      toIndex: 2
-    stageItems:
-    - itemId: jelly
-      count: 2
-    - itemId: riceball
-      count: 3
-    - itemId: monster
-      count: 1
+    timeLimit: 60

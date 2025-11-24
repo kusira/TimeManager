@@ -16,6 +16,15 @@ namespace Components.Game.Canvas.Scripts
         [Tooltip("現在のステージインデックス")]
         [SerializeField] private int currentStageIndex = 0;
 
+        public void SetStageIndex(int index)
+        {
+            currentStageIndex = index;
+            // ステージが変わったらデータを再ロードしてリセットなどが必要
+            LoadStageData();
+            // InitializeGauge(); // 初期幅が0で上書きされるのを防ぐため削除（Awakeで取得済み）
+            StartTimer();
+        }
+
         [Header("Game Status")]
         [SerializeField] private bool isRunning = false;
         
@@ -27,9 +36,16 @@ namespace Components.Game.Canvas.Scripts
         // 外部から時間超過を知るためのイベント（必要なら使用）
         // public event System.Action OnTimeUp;
 
-        private void Start()
+        private void Awake()
         {
             InitializeGauge();
+        }
+
+        private void Start()
+        {
+            // Awakeで初期化済みなのでここでは不要、ただし未初期化なら実行
+            if (initialWidth <= 0) InitializeGauge();
+
             LoadStageData();
             
             // 自動スタート (必要に応じて変更)
@@ -54,6 +70,9 @@ namespace Components.Game.Canvas.Scripts
 
         private void InitializeGauge()
         {
+            // 既に取得済みなら何もしない
+            if (initialWidth > 0) return;
+
             if (gaugeImage != null)
             {
                 gaugeRect = gaugeImage.GetComponent<RectTransform>();
@@ -61,15 +80,6 @@ namespace Components.Game.Canvas.Scripts
                 {
                     initialWidth = gaugeRect.rect.width;
                 }
-                // 初期状態は0からスタートするのでwidthを0にするか、scaleを使うか
-                // ここではwidthを変更する方式（Simple FillなどではなくRectTransformのサイズ変更）を想定
-                // ただし、「現在最大値のwidthをとっています」とのことなので、
-                // 0秒でwidth=0, 制限時間でwidth=initialWidth になるようにします。
-                
-                // Image TypeがFilledの場合は fillAmount を使うのが一般的ですが、
-                // widthを指定されたので sizeDelta を操作します。
-                // アンカー設定によっては挙動が変わるため注意が必要。
-                // 左詰めにするには Pivot X=0 であることが望ましい。
             }
         }
 
