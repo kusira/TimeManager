@@ -53,4 +53,6 @@ MonoBehaviour:
       count: 3
     - itemId: monster
       count: 1
+    - itemId: caloriemate
+      count: 1
     timeLimit: 60
