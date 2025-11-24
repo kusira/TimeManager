@@ -46,9 +46,9 @@ namespace Components.Game.Canvas.Scripts
         [Tooltip("リザルト表示フェード時間")]
         [SerializeField] private float fadeDuration = 0.5f;
         [Tooltip("UIパーツ出現時の遅延設定 (0: Delay, 1: Delay*2 ...)")]
-        [SerializeField] private float uiDelayStep = 0.3f;
+        [SerializeField] private float UIDelayStep = 0.3f;
         [Tooltip("UIパーツ出現時のY軸移動距離")]
-        [SerializeField] private float uiSlideDistance = 50f;
+        [SerializeField] private float UISlideDistance = 50f;
 
         [System.Serializable]
         public class UIAnimationGroup
@@ -132,7 +132,7 @@ namespace Components.Game.Canvas.Scripts
                     {
                         cg.alpha = 0f;
                         cg.gameObject.SetActive(true); // 表示状態にしておく
-                        cg.transform.localPosition -= new Vector3(0, uiSlideDistance, 0);
+                        cg.transform.localPosition -= new Vector3(0, UISlideDistance, 0);
                     }
                 }
             }
@@ -143,7 +143,7 @@ namespace Components.Game.Canvas.Scripts
                 // グループごとの遅延
                 if (i > 0)
                 {
-                    yield return new WaitForSecondsRealtime(uiDelayStep);
+                    yield return new WaitForSecondsRealtime(UIDelayStep);
                 }
 
                 StartCoroutine(AnimateUIGroup(uiGroups[i]));
@@ -163,7 +163,7 @@ namespace Components.Game.Canvas.Scripts
                 if (cg != null)
                 {
                     startPositions.Add(cg.transform.localPosition);
-                    targetPositions.Add(cg.transform.localPosition + new Vector3(0, uiSlideDistance, 0));
+                    targetPositions.Add(cg.transform.localPosition + new Vector3(0, UISlideDistance, 0));
                 }
                 else
                 {

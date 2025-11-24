@@ -85,8 +85,6 @@ namespace Components.Game.Graph.Scripts
             public GameObject gameObject;
         }
 
-        [Header("Worker References (Assign in Inspector)")]
-        [Tooltip("各Workerのゲームオブジェクトを割り当ててください")]
         [SerializeField] private List<WorkerGameObject> workerObjects = new List<WorkerGameObject>
         {
             new WorkerGameObject { name = "Worker A" },
@@ -117,12 +115,50 @@ namespace Components.Game.Graph.Scripts
         private const float AlphaTransitionSpeed = 1.0f / 0.3f; 
         private const float CompletionAnimDuration = 0.3f;
 
+        private void Awake()
+        {
+            AssignWorkerObjectsAutomatically();
+        }
+
         private void Start()
         {
             if (resultManager == null) resultManager = FindFirstObjectByType<Components.Game.Canvas.Scripts.ResultManager>();
             if (timeLimitManager == null) timeLimitManager = FindFirstObjectByType<Components.Game.Canvas.Scripts.TimeLimitManager>(); // 追加
             // Auto initialize if possible
             // Initialize(); 
+        }
+
+        private void AssignWorkerObjectsAutomatically()
+        {
+            // Workerリストが空、または要素数が足りない場合のためのフォールバック
+            // Inspectorで設定されている想定だが、動的確保も考慮
+            if (workerObjects == null) workerObjects = new List<WorkerGameObject>();
+            
+            // 5人分（A-E）確保
+            for (int i = workerObjects.Count; i < 5; i++)
+            {
+                workerObjects.Add(new WorkerGameObject { name = "Worker " + (char)('A' + i) });
+            }
+
+            for (int i = 0; i < workerObjects.Count; i++)
+            {
+                // 既にアサインされていればスキップ
+                if (workerObjects[i].gameObject != null) continue;
+
+                char workerChar = (char)('A' + i);
+                // "WorkerA", "WorkerB" ... のパターンを検索
+                string targetName1 = "Worker" + workerChar; 
+                // "Worker A", "Worker B" ... のパターンも一応検索
+                string targetName2 = "Worker " + workerChar;
+
+                GameObject found = GameObject.Find(targetName1);
+                if (found == null) found = GameObject.Find(targetName2);
+
+                if (found != null)
+                {
+                    workerObjects[i].gameObject = found;
+                }
+            }
         }
 
         private void Update()
