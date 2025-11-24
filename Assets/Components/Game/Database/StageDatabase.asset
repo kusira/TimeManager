@@ -33,6 +33,9 @@ MonoBehaviour:
     - i: 0
       j: 3
       taskCompletionTime: 10
+    - i: 2
+      j: 0
+      taskCompletionTime: 10
     edges:
     - fromIndex: 0
       toIndex: 1
@@ -47,12 +50,9 @@ MonoBehaviour:
     - fromIndex: 2
       toIndex: 5
     stageItems:
-    - itemId: jelly
-      count: 2
     - itemId: riceball
+      count: 2
+    - itemId: jelly
       count: 3
-    - itemId: monster
-      count: 1
-    - itemId: caloriemate
-      count: 1
     timeLimit: 60
+    initialWorkerCount: 2

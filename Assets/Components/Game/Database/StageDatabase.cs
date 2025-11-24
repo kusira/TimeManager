@@ -23,6 +23,10 @@ namespace Components.Game
             [Header("Time Settings")]
             [Tooltip("制限時間 (秒)")]
             public float timeLimit = 60f;
+
+            [Header("Worker Settings")]
+            [Tooltip("初期配置するワーカーの人数")]
+            public int initialWorkerCount = 1;
         }
 
         [System.Serializable]

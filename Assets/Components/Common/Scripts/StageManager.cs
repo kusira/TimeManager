@@ -81,7 +81,14 @@ namespace Components.Game
         {
             if (stageText != null)
             {
-                stageText.text = $"Stage {currentStageIndex + 1}";
+                if(currentStageIndex == 0)
+                {
+                    stageText.text = $"チュートリアル";
+                }
+                else
+                {
+                    stageText.text = $"{currentStageIndex} 日目";
+                }
             }
         }
 
