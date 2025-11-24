@@ -1,0 +1,1040 @@
+fileFormatVersion: 2
+guid: bec4be27d6f22eb4c93c6acfd6ec2ba3
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2935301758503064090
+    second: Start_Calendar_Day_0
+  - first:
+      213: 3026302530718146500
+    second: Start_Calendar_Day_1
+  - first:
+      213: 1340357501474874017
+    second: Start_Calendar_Day_2
+  - first:
+      213: -1478825026775492761
+    second: Start_Calendar_Day_3
+  - first:
+      213: 5876715818966679506
+    second: Start_Calendar_Day_4
+  - first:
+      213: -3172898423886249416
+    second: Start_Calendar_Day_5
+  - first:
+      213: 3304494732591859656
+    second: Start_Calendar_Day_6
+  - first:
+      213: -7547923311673342434
+    second: Start_Calendar_Day_7
+  - first:
+      213: -5733303751365178576
+    second: Start_Calendar_Day_8
+  - first:
+      213: 7023179398328756830
+    second: Start_Calendar_Day_9
+  - first:
+      213: -4794455791330507066
+    second: Start_Calendar_Day_10
+  - first:
+      213: -1279331299335954218
+    second: Start_Calendar_Day_11
+  - first:
+      213: 2991587617377752397
+    second: Start_Calendar_Day_12
+  - first:
+      213: 8841947347045505412
+    second: Start_Calendar_Day_13
+  - first:
+      213: 3091671246727899747
+    second: Start_Calendar_Day_14
+  - first:
+      213: 2877326640351871865
+    second: Start_Calendar_Day_15
+  - first:
+      213: -8851119055053556876
+    second: Start_Calendar_Day_16
+  - first:
+      213: -7096333425093040393
+    second: Start_Calendar_Day_17
+  - first:
+      213: 6608142452413223577
+    second: Start_Calendar_Day_18
+  - first:
+      213: -6122808390379465124
+    second: Start_Calendar_Day_19
+  - first:
+      213: 2513173618600736278
+    second: Start_Calendar_Day_20
+  - first:
+      213: 3352323196928855557
+    second: Start_Calendar_Day_21
+  - first:
+      213: 6641825288631437041
+    second: Start_Calendar_Day_22
+  - first:
+      213: 284637768236153599
+    second: Start_Calendar_Day_23
+  - first:
+      213: -6085200576933230849
+    second: Start_Calendar_Day_24
+  - first:
+      213: -3275576590574721748
+    second: Start_Calendar_Day_25
+  - first:
+      213: 3411676802662953259
+    second: Start_Calendar_Day_26
+  - first:
+      213: -3838349394338031244
+    second: Start_Calendar_Day_27
+  - first:
+      213: 1272245462303984349
+    second: Start_Calendar_Day_28
+  - first:
+      213: 420040139279535653
+    second: Start_Calendar_Day_29
+  - first:
+      213: -6226286957771650605
+    second: Start_Calendar_Day_30
+  - first:
+      213: -3062410238548077207
+    second: Start_Calendar_Day_31
+  - first:
+      213: -2653880049440197902
+    second: Start_Calendar_Day_32
+  - first:
+      213: 3096218179353475051
+    second: Start_Calendar_Day_33
+  - first:
+      213: 2674041107631547464
+    second: Start_Calendar_Day_34
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 200
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Start_Calendar_Day_0
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 729
+        width: 202
+        height: 162
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a129720c5694cb820800000000000000
+      internalID: 2935301758503064090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_1
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 729
+        width: 212
+        height: 162
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4cf125e1e169ff920800000000000000
+      internalID: 3026302530718146500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_2
+      rect:
+        serializedVersion: 2
+        x: 609
+        y: 729
+        width: 212
+        height: 162
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a2a07bcb08e99210800000000000000
+      internalID: 1340357501474874017
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_3
+      rect:
+        serializedVersion: 2
+        x: 829
+        y: 729
+        width: 212
+        height: 162
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 767d61a29782a7be0800000000000000
+      internalID: -1478825026775492761
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_4
+      rect:
+        serializedVersion: 2
+        x: 1049
+        y: 729
+        width: 212
+        height: 162
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2df7d63b6e94e8150800000000000000
+      internalID: 5876715818966679506
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_5
+      rect:
+        serializedVersion: 2
+        x: 1269
+        y: 729
+        width: 212
+        height: 162
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8320dd7b1b997f3d0800000000000000
+      internalID: -3172898423886249416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_6
+      rect:
+        serializedVersion: 2
+        x: 1489
+        y: 729
+        width: 222
+        height: 162
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c7894a837cebdd20800000000000000
+      internalID: 3304494732591859656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_7
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 549
+        width: 202
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1602d71db3604790800000000000000
+      internalID: -7547923311673342434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_8
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 549
+        width: 212
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03bc67e4d963f60b0800000000000000
+      internalID: -5733303751365178576
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_9
+      rect:
+        serializedVersion: 2
+        x: 609
+        y: 549
+        width: 212
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5a2a3fc378577160800000000000000
+      internalID: 7023179398328756830
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_10
+      rect:
+        serializedVersion: 2
+        x: 829
+        y: 549
+        width: 212
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c64e622cdba67db0800000000000000
+      internalID: -4794455791330507066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_11
+      rect:
+        serializedVersion: 2
+        x: 1049
+        y: 549
+        width: 212
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d0aa0126f6ee3ee0800000000000000
+      internalID: -1279331299335954218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_12
+      rect:
+        serializedVersion: 2
+        x: 1269
+        y: 549
+        width: 212
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4512408611448920800000000000000
+      internalID: 2991587617377752397
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_13
+      rect:
+        serializedVersion: 2
+        x: 1489
+        y: 549
+        width: 222
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 489da57f348e4ba70800000000000000
+      internalID: 8841947347045505412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_14
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 369
+        width: 202
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 36a61875e92d7ea20800000000000000
+      internalID: 3091671246727899747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_15
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 369
+        width: 212
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 97301fca5515ee720800000000000000
+      internalID: 2877326640351871865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_16
+      rect:
+        serializedVersion: 2
+        x: 609
+        y: 369
+        width: 212
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47377da5d128a2580800000000000000
+      internalID: -8851119055053556876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_17
+      rect:
+        serializedVersion: 2
+        x: 829
+        y: 369
+        width: 212
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f6299d0952c48d90800000000000000
+      internalID: -7096333425093040393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_18
+      rect:
+        serializedVersion: 2
+        x: 1049
+        y: 369
+        width: 212
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 992d44d8c86d4bb50800000000000000
+      internalID: 6608142452413223577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_19
+      rect:
+        serializedVersion: 2
+        x: 1269
+        y: 369
+        width: 212
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c5696af753a670ba0800000000000000
+      internalID: -6122808390379465124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_20
+      rect:
+        serializedVersion: 2
+        x: 1489
+        y: 369
+        width: 222
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 616749b371690e220800000000000000
+      internalID: 2513173618600736278
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_21
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 189
+        width: 202
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50e0f3daf28d58e20800000000000000
+      internalID: 3352323196928855557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_22
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 189
+        width: 212
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f6451df8e08c2c50800000000000000
+      internalID: 6641825288631437041
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_23
+      rect:
+        serializedVersion: 2
+        x: 609
+        y: 189
+        width: 212
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ffa3069ca8c33f300800000000000000
+      internalID: 284637768236153599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_24
+      rect:
+        serializedVersion: 2
+        x: 829
+        y: 189
+        width: 212
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff684e8e0560d8ba0800000000000000
+      internalID: -6085200576933230849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_25
+      rect:
+        serializedVersion: 2
+        x: 1049
+        y: 189
+        width: 212
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2565341270da82d0800000000000000
+      internalID: -3275576590574721748
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_26
+      rect:
+        serializedVersion: 2
+        x: 1269
+        y: 189
+        width: 212
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b217a27e9f5b85f20800000000000000
+      internalID: 3411676802662953259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_27
+      rect:
+        serializedVersion: 2
+        x: 1489
+        y: 189
+        width: 222
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47955a2ff817bbac0800000000000000
+      internalID: -3838349394338031244
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_28
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 19
+        width: 202
+        height: 162
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dda4bbfd18ce7a110800000000000000
+      internalID: 1272245462303984349
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_29
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 19
+        width: 212
+        height: 162
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52e892df74844d500800000000000000
+      internalID: 420040139279535653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_30
+      rect:
+        serializedVersion: 2
+        x: 609
+        y: 19
+        width: 212
+        height: 162
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d98f5c0009c799a0800000000000000
+      internalID: -6226286957771650605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_31
+      rect:
+        serializedVersion: 2
+        x: 829
+        y: 19
+        width: 212
+        height: 162
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 96592d60d122085d0800000000000000
+      internalID: -3062410238548077207
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_32
+      rect:
+        serializedVersion: 2
+        x: 1049
+        y: 19
+        width: 212
+        height: 162
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f2fe98e7268b2bd0800000000000000
+      internalID: -2653880049440197902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_33
+      rect:
+        serializedVersion: 2
+        x: 1269
+        y: 19
+        width: 212
+        height: 162
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be77877970af7fa20800000000000000
+      internalID: 3096218179353475051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Start_Calendar_Day_34
+      rect:
+        serializedVersion: 2
+        x: 1489
+        y: 19
+        width: 222
+        height: 162
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 844ab2f383a1c1520800000000000000
+      internalID: 2674041107631547464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Start_Calendar_Day_0: 2935301758503064090
+      Start_Calendar_Day_1: 3026302530718146500
+      Start_Calendar_Day_10: -4794455791330507066
+      Start_Calendar_Day_11: -1279331299335954218
+      Start_Calendar_Day_12: 2991587617377752397
+      Start_Calendar_Day_13: 8841947347045505412
+      Start_Calendar_Day_14: 3091671246727899747
+      Start_Calendar_Day_15: 2877326640351871865
+      Start_Calendar_Day_16: -8851119055053556876
+      Start_Calendar_Day_17: -7096333425093040393
+      Start_Calendar_Day_18: 6608142452413223577
+      Start_Calendar_Day_19: -6122808390379465124
+      Start_Calendar_Day_2: 1340357501474874017
+      Start_Calendar_Day_20: 2513173618600736278
+      Start_Calendar_Day_21: 3352323196928855557
+      Start_Calendar_Day_22: 6641825288631437041
+      Start_Calendar_Day_23: 284637768236153599
+      Start_Calendar_Day_24: -6085200576933230849
+      Start_Calendar_Day_25: -3275576590574721748
+      Start_Calendar_Day_26: 3411676802662953259
+      Start_Calendar_Day_27: -3838349394338031244
+      Start_Calendar_Day_28: 1272245462303984349
+      Start_Calendar_Day_29: 420040139279535653
+      Start_Calendar_Day_3: -1478825026775492761
+      Start_Calendar_Day_30: -6226286957771650605
+      Start_Calendar_Day_31: -3062410238548077207
+      Start_Calendar_Day_32: -2653880049440197902
+      Start_Calendar_Day_33: 3096218179353475051
+      Start_Calendar_Day_34: 2674041107631547464
+      Start_Calendar_Day_4: 5876715818966679506
+      Start_Calendar_Day_5: -3172898423886249416
+      Start_Calendar_Day_6: 3304494732591859656
+      Start_Calendar_Day_7: -7547923311673342434
+      Start_Calendar_Day_8: -5733303751365178576
+      Start_Calendar_Day_9: 7023179398328756830
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

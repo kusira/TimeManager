@@ -1,0 +1,68 @@
+[
+  {
+    "scene": "non",
+    "workTime": "未定",
+    "difficulty": "",
+    "comment": "この日のうちに進めておけば、、"
+  },
+  {
+    "scene": "GameScene",
+    "workTime": "30s",
+    "difficulty": "★★★★☆",
+    "comment": "期日まで後７日"
+  },
+  {
+    "scene": "GamaScene",
+    "workTime": "30s",
+    "difficulty": "★★★★☆",
+    "comment": "期日まで後６日"
+  },
+  {
+    "scene": "GamaScene",
+    "workTime": "30s",
+    "difficulty": "★★★★☆",
+    "comment": "期日まで後５日"
+  },
+  {
+    "scene": "GamaScene",
+    "workTime": "30s",
+    "difficulty": "★★★★☆",
+    "comment": "期日まで後４日"
+  },
+  {
+    "scene": "GamaScene",
+    "workTime": "30s",
+    "difficulty": "★★★★☆",
+    "comment": "期日まで後３日"
+  },
+  {
+    "scene": "GamaScene",
+    "workTime": "30s",
+    "difficulty": "★★★★☆",
+    "comment": "期日まで後２日"
+  },
+  {
+    "scene": "GamaScene",
+    "workTime": "30s",
+    "difficulty": "★★★★☆",
+    "comment": "期日まで後１日"
+  },
+  {
+    "scene": "GamaScene",
+    "workTime": "30s",
+    "difficulty": "★★★★☆",
+    "comment": "期日は今日"
+  },
+  {
+    "scene": "non",
+    "workTime": "未定",
+    "difficulty": "",
+    "comment": "なるがようになる。"
+  },
+  {
+    "scene": "non",
+    "workTime": "休日",
+    "difficulty": "",
+    "comment": "唯一、家に変えれる日"
+  }
+]
