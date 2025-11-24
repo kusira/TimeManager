@@ -1,68 +1,58 @@
 [
   {
-    "scene": "non",
-    "workTime": "未定",
-    "difficulty": "",
-    "comment": "この日のうちに進めておけば、、"
+    "scene": "GameScene",
+    "workTime": "はじめに",
+    "difficulty": "★☆☆☆☆",
+    "comment": "このゲームのあそびかた",
+    "stageIndex": -1
+  },
+  {
+    "scene": "GameScene",
+    "workTime": "STAGE 1",
+    "difficulty": "★☆☆☆☆",
+    "comment": "期日まで\n後６日",
+    "stageIndex": 0
+  },
+  {
+    "scene": "GameScene",
+    "workTime": "STAGE 2",
+    "difficulty": "★★☆☆☆",
+    "comment": "期日まで\n後５日",
+    "stageIndex": 1
+  },
+  {
+    "scene": "GameScene",
+    "workTime": "STAGE 3",
+    "difficulty": "★★☆☆☆",
+    "comment": "期日まで\n後４日",
+    "stageIndex": 2
+  },
+  {
+    "scene": "GameScene",
+    "workTime": "STAGE 4",
+    "difficulty": "★★★☆☆",
+    "comment": "期日まで\n後３日",
+    "stageIndex": 3
+  },
+  {
+    "scene": "GameScene",
+    "workTime": "STAGE 5",
+    "difficulty": "★★★☆☆",
+    "comment": "期日まで\n後２日",
+    "stageIndex": 4
+  },
+  {
+    "scene": "GameScene",
+    "workTime": "STAGE 6",
+    "difficulty":"★★★★☆",
+    "comment": "期日まで\n後１日",
+    "stageIndex": 5
   },
   {
     "scene": "GameScene",
     "workTime": "30s",
-    "difficulty": "★★★★☆",
-    "comment": "期日まで後７日"
-  },
-  {
-    "scene": "GamaScene",
-    "workTime": "30s",
-    "difficulty": "★★★★☆",
-    "comment": "期日まで後６日"
-  },
-  {
-    "scene": "GamaScene",
-    "workTime": "30s",
-    "difficulty": "★★★★☆",
-    "comment": "期日まで後５日"
-  },
-  {
-    "scene": "GamaScene",
-    "workTime": "30s",
-    "difficulty": "★★★★☆",
-    "comment": "期日まで後４日"
-  },
-  {
-    "scene": "GamaScene",
-    "workTime": "30s",
-    "difficulty": "★★★★☆",
-    "comment": "期日まで後３日"
-  },
-  {
-    "scene": "GamaScene",
-    "workTime": "30s",
-    "difficulty": "★★★★☆",
-    "comment": "期日まで後２日"
-  },
-  {
-    "scene": "GamaScene",
-    "workTime": "30s",
-    "difficulty": "★★★★☆",
-    "comment": "期日まで後１日"
-  },
-  {
-    "scene": "GamaScene",
-    "workTime": "30s",
-    "difficulty": "★★★★☆",
-    "comment": "期日は今日"
-  },
-  {
-    "scene": "non",
-    "workTime": "未定",
-    "difficulty": "",
-    "comment": "なるがようになる。"
-  },
-  {
-    "scene": "non",
-    "workTime": "休日",
-    "difficulty": "",
-    "comment": "唯一、家に変えれる日"
+    "difficulty":"★★★★★",
+    "comment": "期日当日！！",
+    "stageIndex": 6
   }
 ]

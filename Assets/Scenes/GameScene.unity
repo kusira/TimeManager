@@ -316,11 +316,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Components.Game.Graph.Scripts.TaskProgresser
   GraphGenerator: {fileID: 63713394}
-  workerObjects:
-  - name: A
-    gameObject: {fileID: 1604976488}
-  - name: B
-    gameObject: {fileID: 280737623}
+  workerObjects: []
   textFadeDuration: 0.3
   textWaitDuration: 0.1
   uiAnimationOffset: 0.5
@@ -648,11 +644,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 244809146}
   m_CullTransparentMesh: 1
---- !u!1 &280737623 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 445241721637705209, guid: 4ff096de2974b5f41838efc216f1bab5, type: 3}
-  m_PrefabInstance: {fileID: 1044616086}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &280737624 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3738349584592308651, guid: 4ff096de2974b5f41838efc216f1bab5, type: 3}
@@ -1910,43 +1901,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 4ff096de2974b5f41838efc216f1bab5, type: 3}
---- !u!1 &1091917772 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7950995275482640177, guid: 0df4571a698d8c04c94f779c4d9c6d40, type: 3}
-  m_PrefabInstance: {fileID: 7763414017649988273}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1091917773 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3437098748988005639, guid: 0df4571a698d8c04c94f779c4d9c6d40, type: 3}
   m_PrefabInstance: {fileID: 7763414017649988273}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1091917774
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1091917772}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68b5dffa71dcf75459ee3d65f1618a44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Components.Game.Canvas.Scripts.FadeManager
-  fadeImage: {fileID: 1091917775}
-  fadeInOnStart: 1
-  startDelay: 0.3
-  animationDuration: 0.3
---- !u!114 &1091917775 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5926131515497435346, guid: 0df4571a698d8c04c94f779c4d9c6d40, type: 3}
-  m_PrefabInstance: {fileID: 7763414017649988273}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1091917772}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &1191821158
 GameObject:
   m_ObjectHideFlags: 0
@@ -2079,7 +2038,7 @@ MonoBehaviour:
   blackGround: {fileID: 777962782}
   resultTextImage: {fileID: 532295730}
   resultButtonsParent: {fileID: 795514365}
-  fadeManager: {fileID: 1091917774}
+  fadeManager: {fileID: 0}
   stageManager: {fileID: 665873988}
   gameClearSprite: {fileID: 1536380896892045753, guid: 3653fb8fcb8c6d448abd69911bc92b2d, type: 3}
   gameOverSprite: {fileID: -6899527831451061053, guid: af6ca865febff1c48853145af4de9eb0, type: 3}
@@ -2088,10 +2047,10 @@ MonoBehaviour:
   nextButtonSprite: {fileID: -1367529029447242540, guid: 3653fb8fcb8c6d448abd69911bc92b2d, type: 3}
   resultButtonPrefab: {fileID: 509691502397593295, guid: 871bb6022e04f5f43a1246b902dfc0bd, type: 3}
   homeSceneName: TitleScene
-  buttonSpacingX: 150
+  buttonSpacingX: 400
   fadeDuration: 0.5
-  uiDelayStep: 0.3
-  uiSlideDistance: 50
+  UIDelayStep: 0.3
+  UISlideDistance: 50
   uiGroups:
   - groupName: Anim1
     UIElements:
@@ -2179,11 +2138,6 @@ CanvasRenderer:
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7004559017614327683, guid: 6ff63c913af6f0b459286b7f23518833, type: 3}
   m_PrefabInstance: {fileID: 644426458864292383}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1604976488 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3848397498919426091, guid: ed1acdb4bb8bcef4f839ca849ce65d74, type: 3}
-  m_PrefabInstance: {fileID: 729444994}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &1604976489 stripped
 Transform:
@@ -2414,7 +2368,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Components.Game.Canvas.Scripts.ReplayManager
   replayButton: {fileID: 1763254555}
-  fadeManager: {fileID: 1091917774}
+  fadeManager: {fileID: 0}
   clickDelay: 0
 --- !u!1 &1847535200
 GameObject:
@@ -2761,8 +2715,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: '- PAUSE -'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0d3ad68747500b744abd889d58918ddd, type: 2}
-  m_sharedMaterial: {fileID: -455439575007633992, guid: 0d3ad68747500b744abd889d58918ddd, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: fbd5f39f6f09b5947a02b20881ebe45f, type: 2}
+  m_sharedMaterial: {fileID: 863314467985062668, guid: 0d3ad68747500b744abd889d58918ddd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2827,7 +2781,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &2038630838
@@ -3064,6 +3018,46 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2074028187}
     m_Modifications:
+    - target: {fileID: 3077369452845724442, guid: 6ff63c913af6f0b459286b7f23518833, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3077369452845724442, guid: 6ff63c913af6f0b459286b7f23518833, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3077369452845724442, guid: 6ff63c913af6f0b459286b7f23518833, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3298818259550708691, guid: 6ff63c913af6f0b459286b7f23518833, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3298818259550708691, guid: 6ff63c913af6f0b459286b7f23518833, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3713694461727444496, guid: 6ff63c913af6f0b459286b7f23518833, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3713694461727444496, guid: 6ff63c913af6f0b459286b7f23518833, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6834016260593522971, guid: 6ff63c913af6f0b459286b7f23518833, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6834016260593522971, guid: 6ff63c913af6f0b459286b7f23518833, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6834016260593522971, guid: 6ff63c913af6f0b459286b7f23518833, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7004559017614327683, guid: 6ff63c913af6f0b459286b7f23518833, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3264,10 +3258,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7950995275482640177, guid: 0df4571a698d8c04c94f779c4d9c6d40, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1091917774}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0df4571a698d8c04c94f779c4d9c6d40, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 using System;
+using Components.Game.Canvas.Scripts;
 
 [Serializable]
 public class ButtonDataItem
@@ -31,6 +32,9 @@ public class StageSelect : MonoBehaviour
     [Header("JSON (TextAsset)")]
     [SerializeField] private TextAsset jsonFile;
 
+    [Header("Fade")]
+    [SerializeField] private FadeManager fadeManager;
+
     private ButtonDataList data;
 
     void Awake()
@@ -49,6 +53,12 @@ public class StageSelect : MonoBehaviour
         // JSONロード
         string wrapped = "{\"list\":" + jsonFile.text + "}";
         data = JsonUtility.FromJson<ButtonDataList>(wrapped);
+
+        // FadeManagerがアサインされていなければシーン内から探す
+        if (fadeManager == null)
+        {
+            fadeManager = FindFirstObjectByType<FadeManager>();
+        }
     }
 
     // ← ボタンがカーソルに触れたら呼ばれる
@@ -76,7 +86,20 @@ public class StageSelect : MonoBehaviour
         Debug.Log(data.list[index].scene);
         if (data.list[index].scene != "non")
         {
-            SceneManager.LoadScene(data.list[index].scene);
+            // 念のため実行時にもnullチェックして再取得を試みる
+            if (fadeManager == null)
+            {
+                fadeManager = FindFirstObjectByType<FadeManager>();
+            }
+
+            if (fadeManager != null)
+            {
+                fadeManager.FadeOutAndLoadScene(data.list[index].scene);
+            }
+            else
+            {
+                SceneManager.LoadScene(data.list[index].scene);
+            }
         }
     }
 }
