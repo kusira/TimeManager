@@ -85,12 +85,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -10
-  m_Sprite: {fileID: -3296239061247796095, guid: 43ca1a85776e831408b64f9134668b32, type: 3}
+  m_Sprite: {fileID: -5884654432235711412, guid: 43ca1a85776e831408b64f9134668b32, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 18.92, y: 8.92}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -135,7 +135,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 18.92, y: 8.92}
-    newSize: {x: 1, y: 1}
+    newSize: {x: 18.92, y: 8.92}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -331,7 +331,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -455439575007633992, guid: 0d3ad68747500b744abd889d58918ddd, type: 2}
+  - {fileID: -3466088568980908957, guid: fbd5f39f6f09b5947a02b20881ebe45f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -378,8 +378,8 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0d3ad68747500b744abd889d58918ddd, type: 2}
-  m_sharedMaterial: {fileID: -455439575007633992, guid: 0d3ad68747500b744abd889d58918ddd, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: fbd5f39f6f09b5947a02b20881ebe45f, type: 2}
+  m_sharedMaterial: {fileID: -3466088568980908957, guid: fbd5f39f6f09b5947a02b20881ebe45f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1273,7 +1273,6 @@ MonoBehaviour:
   spacingX: 0.8
   maxTasksDisplayed: 3
   moveDuration: 0.3
-  workerObjects: []
 --- !u!1 &6817322778692474555
 GameObject:
   m_ObjectHideFlags: 0

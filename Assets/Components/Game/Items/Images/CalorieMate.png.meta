@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f704275bab257a140bcc8177cec399b1
+guid: 9a2fc23e86b79604a8548fed6b4a6d62
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1530115753573747490
-    second: Menu_SelectButton_0
+      213: 705332171838204702
+    second: CalorieMate_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Menu_SelectButton_0
+      name: CalorieMate_0
       rect:
         serializedVersion: 2
-        x: 21
-        y: 7
-        width: 622
-        height: 102
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 16
+        y: 6
+        width: 232
+        height: 202
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 22b0ef4cb201c3510800000000000000
-      internalID: 1530115753573747490
+      spriteID: e1b221f8fd7d9c900800000000000000
+      internalID: 705332171838204702
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 24ab26452283fae4cb5b024f1eb4468b
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Menu_SelectButton_0: 1530115753573747490
+      CalorieMate_0: 705332171838204702
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

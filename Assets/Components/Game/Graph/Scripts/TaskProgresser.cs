@@ -69,6 +69,7 @@ namespace Components.Game.Graph.Scripts
             public TMP_Text remainText; 
             public TaskNode currentTask;
             public bool isWorking;
+            public float nextTaskTimer; // 次のタスク開始までのタイマー
             public bool isUiShowing; // 追加: UIの表示目標状態
             public Coroutine fadeCoroutine;
             public Vector3 uiOriginalLocalPos;
@@ -103,6 +104,7 @@ namespace Components.Game.Graph.Scripts
         [Header("Bonus Animation Settings")]
         [SerializeField] private float bonusAnimDuration = 0.15f;
         [SerializeField] private Color bonusMaskColor = new Color(1f, 1f, 0.5f); // 少し黄色
+        [SerializeField] private float nextTaskInterval = 0.3f; // タスク間のインターバル
 
         [Header("Debug Info (デバッグ用)")]
         [SerializeField] private List<TaskNode> allTasks = new List<TaskNode>();
@@ -162,6 +164,10 @@ namespace Components.Game.Graph.Scripts
             {
                 float remaining = Mathf.Max(0f, worker.currentTask.totalTime - worker.currentTask.currentTime);
                 worker.remainText.text = remaining.ToString("F1");
+            }
+            else if (worker.remainText.gameObject.activeSelf && worker.isWorking == false) // フェードアウト中かつ次のタスク未開始
+            {
+                worker.remainText.text = "0.0";
             }
         }
 
@@ -426,7 +432,8 @@ namespace Components.Game.Graph.Scripts
                     isWorking = false,
                     currentTask = null,
                     uiOriginalLocalPos = originalPos,
-                    uiInitialScale = rText != null ? rText.transform.localScale : Vector3.one // スケール保存
+                    uiInitialScale = rText != null ? rText.transform.localScale : Vector3.one, // スケール保存
+                    nextTaskTimer = 0f // 初期化
                 });
             }
             workers.Sort((a, b) => a.workerIndex.CompareTo(b.workerIndex));
@@ -508,6 +515,13 @@ namespace Components.Game.Graph.Scripts
             }
             else
             {
+                // インターバル処理
+                if (worker.nextTaskTimer > 0f)
+                {
+                    worker.nextTaskTimer -= Time.deltaTime;
+                    if (worker.nextTaskTimer > 0f) return; // まだインターバル中なら何もしない
+                }
+
                 TaskNode nextTask = null;
 
                 for (int i = 0; i < allTasks.Count; i++)
@@ -550,6 +564,7 @@ namespace Components.Game.Graph.Scripts
 
                 worker.currentTask = null;
                 worker.isWorking = false;
+                worker.nextTaskTimer = nextTaskInterval; // インターバル設定
                 
                 CheckWorkableStatus(); 
             }

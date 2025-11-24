@@ -19,6 +19,10 @@ namespace Components.Game
             [Header("Item Data")]
             // public List<string> itemIds = new List<string>();
             public List<StageItemData> stageItems = new List<StageItemData>();
+
+            [Header("Time Settings")]
+            [Tooltip("制限時間 (秒)")]
+            public float timeLimit = 60f;
         }
 
         [System.Serializable]

@@ -40,6 +40,11 @@ namespace Components.Game.Graph.Scripts
         [Header("Graph Data")]
         [SerializeField] private Components.Game.StageDatabase stageDatabase;
         [SerializeField] private int currentStageIndex = 0;
+
+        public void SetStageIndex(int index)
+        {
+            currentStageIndex = index;
+        }
         
         // インスペクタからの直接入力を防ぐため SerializeField を削除
         private List<VertexData> vertices = new List<VertexData>();
@@ -121,16 +126,20 @@ namespace Components.Game.Graph.Scripts
                     if (indexTransform != null)
                     {
                         var tmpText = indexTransform.GetComponent<TMP_Text>();
-                        // もし直下になければ Index オブジェクトの子も探すか、あるいは単にGetComponentで探す
-                        // リクエスト: "IndexというゲームオブジェクトにアタッチされているTextMeshPro"
                         if (tmpText != null)
                         {
                             tmpText.text = (i + 1).ToString();
                         }
-                        else
+                    }
+
+                    // CostTimeTextにタスク時間を設定
+                    Transform costTimeTransform = vertexObj.transform.Find("CostTimeText");
+                    if (costTimeTransform != null)
+                    {
+                        var costText = costTimeTransform.GetComponent<TMP_Text>();
+                        if (costText != null)
                         {
-                            // IndexオブジェクトはあるがTMPが直下にない場合、念のためその子も探すか、ログを出す
-                            // 今回はIndexオブジェクト自体にアタッチされていると想定
+                            costText.text = $"{Mathf.RoundToInt(vertexData.taskCompletionTime)}s";
                         }
                     }
                     
