@@ -8,6 +8,8 @@ namespace Components.Game
 {
     public class StageManager : MonoBehaviour
     {
+        public static StageManager Instance { get; private set; }
+
         [Header("Settings")]
         [Tooltip("現在のステージインデックス")]
         [SerializeField] private int currentStageIndex = 0;
@@ -28,6 +30,13 @@ namespace Components.Game
 
         private void Awake()
         {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            Instance = this;
+
             // PendingStageIndexがあれば適用
             if (PendingStageIndex.HasValue)
             {
@@ -90,6 +99,14 @@ namespace Components.Game
         public void PrepareNextStage()
         {
             PendingStageIndex = currentStageIndex + 1;
+        }
+
+        /// <summary>
+        /// 次にロードされるシーンでのステージインデックスを指定する
+        /// </summary>
+        public static void SetNextStage(int index)
+        {
+            PendingStageIndex = index;
         }
     }
 }

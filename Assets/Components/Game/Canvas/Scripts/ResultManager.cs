@@ -227,6 +227,13 @@ namespace Components.Game.Canvas.Scripts
             UnityEngine.Events.UnityAction replayAction = () => 
             {
                 Time.timeScale = 1f;
+
+                // リプレイ時は現在のステージインデックスを維持する
+                if (stageManager != null)
+                {
+                    StageManager.SetNextStage(stageManager.CurrentStageIndex);
+                }
+
                 string currentScene = SceneManager.GetActiveScene().name;
                 if (fadeManager != null) fadeManager.FadeOutAndLoadScene(currentScene);
                 else SceneManager.LoadScene(currentScene);

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Components.Game; // StageManagerのため
 
 namespace Components.Game.Canvas.Scripts
 {
@@ -31,6 +32,12 @@ namespace Components.Game.Canvas.Scripts
 
         private void OnReplayClicked()
         {
+            // リプレイ時は現在のステージインデックスを維持する
+            if (StageManager.Instance != null)
+            {
+                StageManager.SetNextStage(StageManager.Instance.CurrentStageIndex);
+            }
+
             string currentSceneName = SceneManager.GetActiveScene().name;
 
             if (fadeManager != null)

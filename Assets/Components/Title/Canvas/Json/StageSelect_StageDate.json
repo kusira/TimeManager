@@ -4,55 +4,55 @@
     "workTime": "はじめに",
     "difficulty": "★☆☆☆☆",
     "comment": "このゲームのあそびかた",
-    "stageIndex": -1
+    "stageIndex": 0
   },
   {
     "scene": "GameScene",
     "workTime": "STAGE 1",
     "difficulty": "★☆☆☆☆",
     "comment": "期日まで\n後６日",
-    "stageIndex": 0
+    "stageIndex": 1
   },
   {
     "scene": "GameScene",
     "workTime": "STAGE 2",
     "difficulty": "★★☆☆☆",
     "comment": "期日まで\n後５日",
-    "stageIndex": 1
+    "stageIndex": 2
   },
   {
     "scene": "GameScene",
     "workTime": "STAGE 3",
     "difficulty": "★★☆☆☆",
     "comment": "期日まで\n後４日",
-    "stageIndex": 2
+    "stageIndex": 3
   },
   {
     "scene": "GameScene",
     "workTime": "STAGE 4",
     "difficulty": "★★★☆☆",
     "comment": "期日まで\n後３日",
-    "stageIndex": 3
+    "stageIndex": 4
   },
   {
     "scene": "GameScene",
     "workTime": "STAGE 5",
     "difficulty": "★★★☆☆",
     "comment": "期日まで\n後２日",
-    "stageIndex": 4
+    "stageIndex": 5
   },
   {
     "scene": "GameScene",
     "workTime": "STAGE 6",
     "difficulty":"★★★★☆",
     "comment": "期日まで\n後１日",
-    "stageIndex": 5
+    "stageIndex": 6
   },
   {
     "scene": "GameScene",
     "workTime": "30s",
     "difficulty":"★★★★★",
     "comment": "期日当日！！",
-    "stageIndex": 6
+    "stageIndex": 7
   }
 ]
