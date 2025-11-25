@@ -56,6 +56,17 @@ namespace Components.Game
         {
             if (Instance != null && Instance != this)
             {
+                // 新しいシーンで生成されたStageManagerから、シーン内の参照（UIなど）をシングルトンに引き継ぐ
+                if (this.stageText != null)
+                {
+                    Instance.stageText = this.stageText;
+                }
+                
+                // 他のInspector設定された参照も引き継ぐ
+                if (this.graphGenerator != null) Instance.graphGenerator = this.graphGenerator;
+                if (this.itemGenerator != null) Instance.itemGenerator = this.itemGenerator;
+                if (this.timeLimitManager != null) Instance.timeLimitManager = this.timeLimitManager;
+
                 Destroy(gameObject);
                 return;
             }

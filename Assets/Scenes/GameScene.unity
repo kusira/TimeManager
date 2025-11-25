@@ -399,6 +399,7 @@ GameObject:
   m_Component:
   - component: {fileID: 91529655}
   - component: {fileID: 91529654}
+  - component: {fileID: 91529656}
   m_Layer: 0
   m_Name: GameBGMManager
   m_TagString: Untagged
@@ -518,6 +519,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &91529656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 91529653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26e6a97c60e7d184487c3eaae4b80304, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Components.Game.GameBGMManager
+  keepBgmScenes:
+  - GameScene
 --- !u!1 &177087399
 GameObject:
   m_ObjectHideFlags: 0
@@ -2703,7 +2718,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: ab45417eb101cd54f8cb098a7010ffbe, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.6
   m_Pitch: 1
   Loop: 0
   Mute: 0
