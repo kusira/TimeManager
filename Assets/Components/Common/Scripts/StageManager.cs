@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement; // 追加
 using Components.Game.Graph.Scripts;
 using Components.Game.Items.Scripts;
 using Components.Game.Canvas.Scripts;
@@ -25,6 +26,29 @@ namespace Components.Game
 
         public int CurrentStageIndex => currentStageIndex;
 
+        private const string PREFS_KEY_MAX_STAGE = "MaxReachedStage";
+
+        /// <summary>
+        /// 到達した最大ステージを取得
+        /// </summary>
+        public static int GetMaxReachedStage()
+        {
+            return PlayerPrefs.GetInt(PREFS_KEY_MAX_STAGE, 0);
+        }
+
+        /// <summary>
+        /// 最大到達ステージを更新して保存
+        /// </summary>
+        public static void UpdateMaxReachedStage(int stageIndex)
+        {
+            int currentMax = GetMaxReachedStage();
+            if (stageIndex > currentMax)
+            {
+                PlayerPrefs.SetInt(PREFS_KEY_MAX_STAGE, stageIndex);
+                PlayerPrefs.Save();
+            }
+        }
+
         // 次のシーンロード時に適用するステージインデックス
         private static int? PendingStageIndex = null;
 
@@ -36,7 +60,31 @@ namespace Components.Game
                 return;
             }
             Instance = this;
+            DontDestroyOnLoad(gameObject);
 
+            // シーンロードイベントの登録
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            
+            InitializeDependencies();
+        }
+
+        private void OnDestroy()
+        {
+            // シングルトンインスタンスが破棄されるときのみ解除
+            if (Instance == this)
+            {
+                SceneManager.sceneLoaded -= OnSceneLoaded;
+            }
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            // シーン遷移時にも依存関係を再取得・初期化
+            InitializeDependencies();
+        }
+
+        private void InitializeDependencies()
+        {
             // PendingStageIndexがあれば適用
             if (PendingStageIndex.HasValue)
             {
@@ -44,10 +92,19 @@ namespace Components.Game
                 PendingStageIndex = null; // リセット
             }
 
-            // 自動で探す (アサインされていなければ)
+            // 自動で探す (参照が切れている場合やnullの場合)
             if (graphGenerator == null) graphGenerator = FindFirstObjectByType<GraphGenerator>();
             if (itemGenerator == null) itemGenerator = FindFirstObjectByType<ItemGenerator>();
             if (timeLimitManager == null) timeLimitManager = FindFirstObjectByType<TimeLimitManager>();
+
+            // UIテキストも再取得を試みる（シーン遷移で参照が切れるため）
+            if (stageText == null)
+            {
+                // StageTextという名前のオブジェクトを探す、あるいはタグで探すなど
+                // ここではとりあえず FindFirstObjectByType で TMP_Text を探すのは危険（他のが取れるかも）なので
+                // 必要であれば "StageNumText" などの名前で探す等の処理を入れると良いですが、
+                // 現状はシリアライズフィールド運用のようなので、nullチェックしつつ更新します。
+            }
 
             ApplyStageIndex();
             UpdateUI();
@@ -106,6 +163,7 @@ namespace Components.Game
         public void PrepareNextStage()
         {
             PendingStageIndex = currentStageIndex + 1;
+            UpdateMaxReachedStage(PendingStageIndex.Value);
         }
 
         /// <summary>

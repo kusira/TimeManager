@@ -48,8 +48,9 @@ namespace Components.Game.Canvas.Scripts
         [SerializeField] private float buttonSpacingX = 150f;
 
         [Header("Audio")]
-        [Tooltip("AudioSource (nullの場合は自動で探すかAddします)")]
-        [SerializeField] private AudioSource audioSource;
+        [Tooltip("AudioSource (SE再生用)")]
+        [SerializeField] private AudioSource clearSE;
+        [SerializeField] private AudioSource gameOverSE;
 
         [Header("Animation Settings")]
         [Tooltip("リザルト表示フェード時間")]
@@ -95,17 +96,27 @@ namespace Components.Game.Canvas.Scripts
             // stageDatabaseはScriptableObjectなのでFindできない。アサイン必須だが、リソースロード等の手段もある。
             // ここではアサイン漏れ警告のみ
             if (stageDatabase == null) Debug.LogWarning("StageDatabase is not assigned in ResultManager.");
-            if (audioSource == null) audioSource = GetComponent<AudioSource>();
         }
 
         public void ShowGameClear()
         {
+            PlayResultSE(true);
             StartCoroutine(ShowResultSequence(true));
         }
 
         public void ShowGameOver()
         {
+            PlayResultSE(false);
             StartCoroutine(ShowResultSequence(false));
+        }
+
+        private void PlayResultSE(bool isClear)
+        {
+            AudioSource targetSource = isClear ? clearSE : gameOverSE;
+            if (targetSource != null)
+            {
+                targetSource.Play();
+            }
         }
 
         private IEnumerator ShowResultSequence(bool isClear)
@@ -231,7 +242,9 @@ namespace Components.Game.Canvas.Scripts
 
             UnityEngine.Events.UnityAction homeAction = () => 
             {
-                if (audioSource != null && audioSource.clip != null) audioSource.PlayOneShot(audioSource.clip);
+                // ボタンSEがあれば再生する (別途AudioSourceが必要ならここに追加)
+                // if (buttonSE != null) buttonSE.Play();
+
                 Time.timeScale = 1f;
                 if (fadeManager != null) fadeManager.FadeOutAndLoadScene(homeSceneName);
                 else SceneManager.LoadScene(homeSceneName);
@@ -240,7 +253,7 @@ namespace Components.Game.Canvas.Scripts
 
             UnityEngine.Events.UnityAction replayAction = () => 
             {
-                if (audioSource != null && audioSource.clip != null) audioSource.PlayOneShot(audioSource.clip);
+                // if (buttonSE != null) buttonSE.Play();
                 Time.timeScale = 1f;
 
                 // リプレイ時は現在のステージインデックスを維持する
@@ -260,7 +273,7 @@ namespace Components.Game.Canvas.Scripts
             {
                 UnityEngine.Events.UnityAction nextAction = () => 
                 {
-                    if (audioSource != null && audioSource.clip != null) audioSource.PlayOneShot(audioSource.clip);
+                    // if (buttonSE != null) buttonSE.Play();
                     Time.timeScale = 1f;
 
                     // Check if it is the last stage
