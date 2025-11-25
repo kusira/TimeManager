@@ -38,6 +38,8 @@ namespace Components.Game
 
         [SerializeField] private List<StageData> stages = new List<StageData>();
 
+        public int StageCount => stages.Count;
+
         /// <summary>
         /// 指定されたインデックスのステージデータを取得します。
         /// </summary>

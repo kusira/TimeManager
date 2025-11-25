@@ -81,13 +81,13 @@ namespace Components.Game
         {
             if (stageText != null)
             {
-                if(currentStageIndex == 0)
+                if(currentStageIndex == 6)
                 {
-                    stageText.text = $"チュートリアル";
+                    stageText.text = $"最終日";
                 }
                 else
                 {
-                    stageText.text = $"{currentStageIndex} 日目";
+                    stageText.text = $"{currentStageIndex+1} 日目";
                 }
             }
         }

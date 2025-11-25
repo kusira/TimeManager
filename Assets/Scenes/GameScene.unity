@@ -2327,6 +2327,7 @@ MonoBehaviour:
   resultButtonsParent: {fileID: 795514365}
   fadeManager: {fileID: 1091917774}
   stageManager: {fileID: 665873988}
+  stageDatabase: {fileID: 11400000, guid: dfcb817de9eddc941a48b13a11b3439f, type: 2}
   gameClearSprite: {fileID: 1536380896892045753, guid: 3653fb8fcb8c6d448abd69911bc92b2d, type: 3}
   gameOverSprite: {fileID: -6899527831451061053, guid: af6ca865febff1c48853145af4de9eb0, type: 3}
   homeButtonSprite: {fileID: -6715530029818846562, guid: 3653fb8fcb8c6d448abd69911bc92b2d, type: 3}
@@ -2334,6 +2335,7 @@ MonoBehaviour:
   nextButtonSprite: {fileID: -1367529029447242540, guid: 3653fb8fcb8c6d448abd69911bc92b2d, type: 3}
   resultButtonPrefab: {fileID: 509691502397593295, guid: 871bb6022e04f5f43a1246b902dfc0bd, type: 3}
   homeSceneName: TitleScene
+  endingSceneName: EndingScene
   buttonSpacingX: 400
   audioSource: {fileID: 1508617267}
   fadeDuration: 0.5

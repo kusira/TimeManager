@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: StageDatabase
   m_EditorClassIdentifier: Assembly-CSharp::Components.Game.StageDatabase
   stages:
-  - stageName: "\u30C1\u30E5\u30FC\u30C8\u30EA\u30A2\u30EB"
+  - stageName: "1\u65E5\u76EE"
     vertices:
     - i: 0
       j: 0
@@ -48,7 +48,56 @@ MonoBehaviour:
       count: 2
     timeLimit: 15
     initialWorkerCount: 2
-  - stageName: "1\u65E5\u76EE"
+  - stageName: "2\u65E5\u76EE"
+    vertices:
+    - i: 0
+      j: 0
+      taskCompletionTime: 7
+    - i: 0
+      j: 1
+      taskCompletionTime: 9
+    - i: 0
+      j: 2
+      taskCompletionTime: 12
+    - i: 0
+      j: 3
+      taskCompletionTime: 8
+    - i: 1
+      j: 0
+      taskCompletionTime: 10
+    - i: 1
+      j: 1
+      taskCompletionTime: 2
+    - i: 1
+      j: 2
+      taskCompletionTime: 10
+    edges:
+    - fromIndex: 0
+      toIndex: 1
+    - fromIndex: 1
+      toIndex: 2
+    - fromIndex: 2
+      toIndex: 3
+    - fromIndex: 4
+      toIndex: 5
+    - fromIndex: 5
+      toIndex: 6
+    - fromIndex: 0
+      toIndex: 5
+    - fromIndex: 1
+      toIndex: 6
+    - fromIndex: 6
+      toIndex: 3
+    stageItems:
+    - itemId: riceball
+      count: 3
+    - itemId: jelly
+      count: 2
+    - itemId: monster
+      count: 1
+    timeLimit: 20
+    initialWorkerCount: 2
+  - stageName: "3\u65E5\u76EE"
     vertices:
     - i: 0
       j: 0
@@ -70,7 +119,7 @@ MonoBehaviour:
       taskCompletionTime: 6
     - i: 1
       j: 2
-      taskCompletionTime: 18
+      taskCompletionTime: 17
     - i: 1
       j: 3
       taskCompletionTime: 4
@@ -99,39 +148,84 @@ MonoBehaviour:
       toIndex: 3
     stageItems:
     - itemId: riceball
-      count: 2
+      count: 1
     - itemId: jelly
       count: 2
     - itemId: monster
       count: 3
     timeLimit: 20
     initialWorkerCount: 2
-  - stageName: "2\u65E5\u76EE"
+  - stageName: "4\u65E5\u76EE"
     vertices:
     - i: 0
       j: 0
-      taskCompletionTime: 12
+      taskCompletionTime: 7
     - i: 0
       j: 1
-      taskCompletionTime: 12
+      taskCompletionTime: 5
     - i: 0
       j: 2
-      taskCompletionTime: 8
+      taskCompletionTime: 12
     - i: 1
       j: 0
-      taskCompletionTime: 10
+      taskCompletionTime: 5
     - i: 1
+      j: 1
+      taskCompletionTime: 5
+    - i: 2
+      j: 0
+      taskCompletionTime: 10
+    - i: 2
       j: 1
       taskCompletionTime: 9
+    edges:
+    - fromIndex: 0
+      toIndex: 1
+    - fromIndex: 1
+      toIndex: 2
+    - fromIndex: 3
+      toIndex: 4
+    - fromIndex: 5
+      toIndex: 6
+    - fromIndex: 4
+      toIndex: 2
+    - fromIndex: 5
+      toIndex: 4
+    - fromIndex: 4
+      toIndex: 7
+    stageItems:
+    - itemId: riceball
+      count: 2
+    - itemId: jelly
+      count: 2
+    timeLimit: 15
+    initialWorkerCount: 3
+  - stageName: "5\u65E5\u76EE"
+    vertices:
+    - i: 0
+      j: 0
+      taskCompletionTime: 8
+    - i: 0
+      j: 1
+      taskCompletionTime: 11
+    - i: 0
+      j: 2
+      taskCompletionTime: 13
+    - i: 1
+      j: 0
+      taskCompletionTime: 13
+    - i: 1
+      j: 1
+      taskCompletionTime: 12
     - i: 1
       j: 2
-      taskCompletionTime: 12
+      taskCompletionTime: 9
     - i: 2
       j: 0
-      taskCompletionTime: 10
+      taskCompletionTime: 9
     - i: 2
       j: 1
-      taskCompletionTime: 18
+      taskCompletionTime: 16
     edges:
     - fromIndex: 0
       toIndex: 1
@@ -146,17 +240,163 @@ MonoBehaviour:
     - fromIndex: 0
       toIndex: 4
     - fromIndex: 4
-      toIndex: 2
-    - fromIndex: 4
       toIndex: 7
+    - fromIndex: 2
+      toIndex: 5
     - fromIndex: 7
       toIndex: 5
     stageItems:
-    - itemId: riceball
-      count: 5
     - itemId: jelly
       count: 3
     - itemId: monster
       count: 2
+    - itemId: mate
+      count: 1
     timeLimit: 25
+    initialWorkerCount: 3
+  - stageName: "6\u65E5\u76EE"
+    vertices:
+    - i: 0
+      j: 0
+      taskCompletionTime: 10
+    - i: 0
+      j: 1
+      taskCompletionTime: 13
+    - i: 0
+      j: 2
+      taskCompletionTime: 10
+    - i: 0
+      j: 3
+      taskCompletionTime: 11
+    - i: 1
+      j: 0
+      taskCompletionTime: 13
+    - i: 1
+      j: 1
+      taskCompletionTime: 8
+    - i: 1
+      j: 2
+      taskCompletionTime: 16
+    - i: 2
+      j: 0
+      taskCompletionTime: 8
+    - i: 2
+      j: 1
+      taskCompletionTime: 9
+    - i: 2
+      j: 2
+      taskCompletionTime: 14
+    edges:
+    - fromIndex: 0
+      toIndex: 1
+    - fromIndex: 1
+      toIndex: 2
+    - fromIndex: 2
+      toIndex: 3
+    - fromIndex: 4
+      toIndex: 5
+    - fromIndex: 5
+      toIndex: 6
+    - fromIndex: 7
+      toIndex: 8
+    - fromIndex: 8
+      toIndex: 9
+    - fromIndex: 1
+      toIndex: 6
+    - fromIndex: 6
+      toIndex: 3
+    - fromIndex: 7
+      toIndex: 5
+    - fromIndex: 5
+      toIndex: 8
+    - fromIndex: 8
+      toIndex: 6
+    stageItems:
+    - itemId: jelly
+      count: 3
+    - itemId: monster
+      count: 3
+    - itemId: mate
+      count: 1
+    timeLimit: 30
+    initialWorkerCount: 3
+  - stageName: "\u6700\u7D42\u65E5"
+    vertices:
+    - i: 0
+      j: 0
+      taskCompletionTime: 12
+    - i: 0
+      j: 1
+      taskCompletionTime: 18
+    - i: 0
+      j: 2
+      taskCompletionTime: 6
+    - i: 0
+      j: 3
+      taskCompletionTime: 12
+    - i: 1
+      j: 0
+      taskCompletionTime: 8
+    - i: 1
+      j: 1
+      taskCompletionTime: 6
+    - i: 1
+      j: 2
+      taskCompletionTime: 9
+    - i: 1
+      j: 3
+      taskCompletionTime: 13
+    - i: 2
+      j: 0
+      taskCompletionTime: 10
+    - i: 2
+      j: 1
+      taskCompletionTime: 10
+    - i: 2
+      j: 2
+      taskCompletionTime: 12
+    - i: 2
+      j: 3
+      taskCompletionTime: 11
+    edges:
+    - fromIndex: 0
+      toIndex: 1
+    - fromIndex: 1
+      toIndex: 2
+    - fromIndex: 2
+      toIndex: 3
+    - fromIndex: 4
+      toIndex: 5
+    - fromIndex: 5
+      toIndex: 6
+    - fromIndex: 6
+      toIndex: 7
+    - fromIndex: 8
+      toIndex: 9
+    - fromIndex: 9
+      toIndex: 10
+    - fromIndex: 10
+      toIndex: 11
+    - fromIndex: 0
+      toIndex: 5
+    - fromIndex: 2
+      toIndex: 6
+    - fromIndex: 6
+      toIndex: 3
+    - fromIndex: 8
+      toIndex: 5
+    - fromIndex: 5
+      toIndex: 10
+    - fromIndex: 7
+      toIndex: 11
+    stageItems:
+    - itemId: riceball
+      count: 1
+    - itemId: jelly
+      count: 3
+    - itemId: monster
+      count: 2
+    - itemId: mate
+      count: 2
+    timeLimit: 30
     initialWorkerCount: 3

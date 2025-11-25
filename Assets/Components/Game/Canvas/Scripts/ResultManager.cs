@@ -3,6 +3,7 @@ using System.Collections.Generic; // 追加
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Components.Game;
 
 namespace Components.Game.Canvas.Scripts
 {
@@ -19,6 +20,8 @@ namespace Components.Game.Canvas.Scripts
         [Header("External Managers")]
         [SerializeField] private FadeManager fadeManager;
         [SerializeField] private StageManager stageManager;
+        [Tooltip("ステージ情報データベース")]
+        [SerializeField] private StageDatabase stageDatabase;
 
         [Header("Sprites")]
         [Tooltip("クリア時のテキスト画像")]
@@ -39,6 +42,8 @@ namespace Components.Game.Canvas.Scripts
         [Header("Settings")]
         [Tooltip("ホームシーンの名前")]
         [SerializeField] private string homeSceneName = "TitleScene";
+        [Tooltip("エンディングシーンの名前")]
+        [SerializeField] private string endingSceneName = "EndingScene";
         [Tooltip("ボタン間のX軸間隔")]
         [SerializeField] private float buttonSpacingX = 150f;
 
@@ -87,6 +92,9 @@ namespace Components.Game.Canvas.Scripts
 
             if (fadeManager == null) fadeManager = FindFirstObjectByType<FadeManager>();
             if (stageManager == null) stageManager = FindFirstObjectByType<StageManager>();
+            // stageDatabaseはScriptableObjectなのでFindできない。アサイン必須だが、リソースロード等の手段もある。
+            // ここではアサイン漏れ警告のみ
+            if (stageDatabase == null) Debug.LogWarning("StageDatabase is not assigned in ResultManager.");
             if (audioSource == null) audioSource = GetComponent<AudioSource>();
         }
 
@@ -254,11 +262,21 @@ namespace Components.Game.Canvas.Scripts
                 {
                     if (audioSource != null && audioSource.clip != null) audioSource.PlayOneShot(audioSource.clip);
                     Time.timeScale = 1f;
-                    if (stageManager != null) stageManager.PrepareNextStage();
-                    
-                    string currentScene = SceneManager.GetActiveScene().name;
-                    if (fadeManager != null) fadeManager.FadeOutAndLoadScene(currentScene);
-                    else SceneManager.LoadScene(currentScene);
+
+                    // Check if it is the last stage
+                    if (stageManager != null && stageDatabase != null && stageManager.CurrentStageIndex >= stageDatabase.StageCount - 1)
+                    {
+                        if (fadeManager != null) fadeManager.FadeOutAndLoadScene(endingSceneName);
+                        else SceneManager.LoadScene(endingSceneName);
+                    }
+                    else
+                    {
+                        if (stageManager != null) stageManager.PrepareNextStage();
+                        
+                        string currentScene = SceneManager.GetActiveScene().name;
+                        if (fadeManager != null) fadeManager.FadeOutAndLoadScene(currentScene);
+                        else SceneManager.LoadScene(currentScene);
+                    }
                 };
                 buttons.Add((nextButtonSprite, nextAction));
             }
