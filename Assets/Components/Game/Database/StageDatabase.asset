@@ -43,7 +43,7 @@ MonoBehaviour:
       toIndex: 2
     stageItems:
     - itemId: riceball
-      count: 2
+      count: 1
     - itemId: jelly
       count: 2
     timeLimit: 15

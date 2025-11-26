@@ -52,6 +52,19 @@ namespace Components.Game.Canvas.Scripts
         [SerializeField] private AudioSource clearSE;
         [SerializeField] private AudioSource gameOverSE;
 
+        [Header("BGM Ducking Settings")]
+        [Tooltip("クリア時のBGM音量 (0.0-1.0)")]
+        [Range(0f, 1f)]
+        [SerializeField] private float clearBgmVolume = 0.2f;
+        [Tooltip("クリア時のBGMフェード時間")]
+        [SerializeField] private float clearBgmFadeTime = 0.5f;
+        
+        [Tooltip("ゲームオーバー時のBGM音量 (0.0-1.0)")]
+        [Range(0f, 1f)]
+        [SerializeField] private float gameOverBgmVolume = 0.1f;
+        [Tooltip("ゲームオーバー時のBGMフェード時間")]
+        [SerializeField] private float gameOverBgmFadeTime = 0.5f;
+
         [Header("Animation Settings")]
         [Tooltip("リザルト表示フェード時間")]
         [SerializeField] private float fadeDuration = 0.5f;
@@ -112,10 +125,44 @@ namespace Components.Game.Canvas.Scripts
 
         private void PlayResultSE(bool isClear)
         {
+            // SE再生
             AudioSource targetSource = isClear ? clearSE : gameOverSE;
+            float clipLength = 3f; // デフォルト
+
             if (targetSource != null)
             {
                 targetSource.Play();
+                if (targetSource.clip != null)
+                {
+                    clipLength = targetSource.clip.length;
+                }
+            }
+
+            // BGM音量調整 (ダッキング)
+            if (GameBGMManager.Instance != null)
+            {
+                StartCoroutine(DuckBGMRoutine(isClear, clipLength));
+            }
+        }
+
+        private IEnumerator DuckBGMRoutine(bool isClear, float seDuration)
+        {
+            float targetVol = isClear ? clearBgmVolume : gameOverBgmVolume;
+            float fadeTime = isClear ? clearBgmFadeTime : gameOverBgmFadeTime;
+
+            // 音量を下げる
+            if (GameBGMManager.Instance != null)
+            {
+                GameBGMManager.Instance.FadeToVolume(targetVol, fadeTime);
+            }
+
+            // SEの再生時間分待機 (フェード時間を考慮するかはお好みだが、SEが鳴り止むまで待つのが自然)
+            yield return new WaitForSecondsRealtime(seDuration);
+
+            // 音量を戻す
+            if (GameBGMManager.Instance != null)
+            {
+                GameBGMManager.Instance.ResetVolume(fadeTime);
             }
         }
 
@@ -245,6 +292,11 @@ namespace Components.Game.Canvas.Scripts
                 // ボタンSEがあれば再生する (別途AudioSourceが必要ならここに追加)
                 // if (buttonSE != null) buttonSE.Play();
 
+                // BGMを戻す (不要かもしれないが、もしホームで同じBGMを使うなら必要)
+                // タイトルへ戻る場合はBGMManagerが破棄されるか、維持される設定による
+                // ここでは念のためリセットコールを入れておくが、GameBGMManagerが破棄されるなら意味はない
+                if (GameBGMManager.Instance != null) GameBGMManager.Instance.ResetVolume(0.5f);
+
                 Time.timeScale = 1f;
                 if (fadeManager != null) fadeManager.FadeOutAndLoadScene(homeSceneName);
                 else SceneManager.LoadScene(homeSceneName);
@@ -254,6 +306,10 @@ namespace Components.Game.Canvas.Scripts
             UnityEngine.Events.UnityAction replayAction = () => 
             {
                 // if (buttonSE != null) buttonSE.Play();
+                
+                // BGMを元の音量に戻す
+                if (GameBGMManager.Instance != null) GameBGMManager.Instance.ResetVolume(0.5f);
+
                 Time.timeScale = 1f;
 
                 // リプレイ時は現在のステージインデックスを維持する
@@ -274,6 +330,10 @@ namespace Components.Game.Canvas.Scripts
                 UnityEngine.Events.UnityAction nextAction = () => 
                 {
                     // if (buttonSE != null) buttonSE.Play();
+                    
+                    // BGMを元の音量に戻す
+                    if (GameBGMManager.Instance != null) GameBGMManager.Instance.ResetVolume(0.5f);
+
                     Time.timeScale = 1f;
 
                     // Check if it is the last stage

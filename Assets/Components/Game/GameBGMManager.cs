@@ -11,6 +11,8 @@ namespace Components.Game
         [SerializeField] private string[] keepBgmScenes = new string[] { "GameScene" };
 
         private AudioSource audioSource;
+        private Coroutine fadeCoroutine;
+        private float defaultVolume = 1.0f;
 
         private void Awake()
         {
@@ -27,9 +29,13 @@ namespace Components.Game
             DontDestroyOnLoad(gameObject);
 
             audioSource = GetComponent<AudioSource>();
-            if (audioSource != null && !audioSource.isPlaying)
+            if (audioSource != null)
             {
-                audioSource.Play();
+                defaultVolume = audioSource.volume; // 初期ボリュームを記憶
+                if (!audioSource.isPlaying)
+                {
+                    audioSource.Play();
+                }
             }
 
             // シーンロードイベントを監視して、タイトルに戻ったときなどに破棄するかどうか制御する
@@ -63,6 +69,41 @@ namespace Components.Game
             {
                 Destroy(gameObject);
             }
+        }
+
+        /// <summary>
+        /// 指定したボリュームへフェードする
+        /// </summary>
+        public void FadeToVolume(float targetVolume, float duration)
+        {
+            if (audioSource == null) return;
+            
+            if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
+            fadeCoroutine = StartCoroutine(FadeRoutine(targetVolume, duration));
+        }
+
+        /// <summary>
+        /// デフォルトのボリュームに戻す
+        /// </summary>
+        public void ResetVolume(float duration)
+        {
+            FadeToVolume(defaultVolume, duration);
+        }
+
+        private System.Collections.IEnumerator FadeRoutine(float targetVolume, float duration)
+        {
+            float startVolume = audioSource.volume;
+            float timer = 0f;
+
+            while (timer < duration)
+            {
+                timer += Time.unscaledDeltaTime; // TimeScaleが0でも動くように
+                audioSource.volume = Mathf.Lerp(startVolume, targetVolume, timer / duration);
+                yield return null;
+            }
+
+            audioSource.volume = targetVolume;
+            fadeCoroutine = null;
         }
     }
 }

@@ -67,6 +67,9 @@ namespace Components.Game
                 if (this.itemGenerator != null) Instance.itemGenerator = this.itemGenerator;
                 if (this.timeLimitManager != null) Instance.timeLimitManager = this.timeLimitManager;
 
+                // 参照更新後に初期化処理（ステージ進行含む）を再実行させる
+                Instance.InitializeDependencies();
+
                 Destroy(gameObject);
                 return;
             }
@@ -94,7 +97,7 @@ namespace Components.Game
             InitializeDependencies();
         }
 
-        private void InitializeDependencies()
+        public void InitializeDependencies()
         {
             // PendingStageIndexがあれば適用
             if (PendingStageIndex.HasValue)
