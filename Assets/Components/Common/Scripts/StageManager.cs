@@ -52,6 +52,9 @@ namespace Components.Game
         // 次のシーンロード時に適用するステージインデックス
         private static int? PendingStageIndex = null;
 
+        // チュートリアルを表示済みかどうかのフラグ (ゲーム起動中のみ保持)
+        public bool HasShownTutorial { get; set; } = false;
+
         private void Awake()
         {
             if (Instance != null && Instance != this)
