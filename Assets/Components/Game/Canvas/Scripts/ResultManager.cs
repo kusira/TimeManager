@@ -338,7 +338,7 @@ namespace Components.Game.Canvas.Scripts
 
                     var stageManagerRef = stageManager != null ? stageManager : StageManager.Instance;
                     int currentStage = stageManagerRef != null ? stageManagerRef.CurrentStageIndex : 0;
-                    bool isLastStage = stageManager != null && stageDatabase != null && currentStage >= stageDatabase.StageCount - 1;
+                    bool isLastStage = stageManagerRef != null && stageDatabase != null && currentStage >= stageDatabase.StageCount - 1;
 
                     if (isLastStage)
                     {
@@ -355,6 +355,7 @@ namespace Components.Game.Canvas.Scripts
                             {
                                 targetManager.SetStage(nextStageIndex, true);
                             }
+                            StageManager.UpdateMaxReachedStage(nextStageIndex);
                             StageManager.SetNextStage(nextStageIndex);
                         };
                         

@@ -556,6 +556,7 @@ MonoBehaviour:
     uiInitialScale: {x: 0, y: 0, z: 0}
   resultManager: {fileID: 0}
   timeLimitManager: {fileID: 0}
+  gameOverRemainTextMinimum: 0.1
   workersGenerator: {fileID: 0}
 --- !u!114 &63713394
 MonoBehaviour:
@@ -5832,7 +5833,7 @@ PrefabInstance:
       objectReference: {fileID: 2062246661}
     - target: {fileID: 8960602145054908316, guid: a39d4cb41e89432449bc62fe0d6ba23c, type: 3}
       propertyPath: currentStageIndex
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

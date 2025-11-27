@@ -510,7 +510,7 @@ MonoBehaviour:
   clickDelay: 0
   homeButton: {fileID: 751568852}
   fadeManager: {fileID: 1553714176}
-  audioSource: {fileID: 0}
+  audioSource: {fileID: 751568855}
 --- !u!114 &751568851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -824,7 +824,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14046c28c496a1040a21ad754d1857c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::XButtonManager
-  tweetText: "\u300E\u4ED5\u4E8B\u304C\u7D0D\u671F\u306B\u9593\u306B\u5408\u308F\u306A\u3044\uFF01\u300F\u3092\u30AF\u30EA\u30A2\u3057\u307E\u3057\u305F\uFF01\n\n\nhttps://unityroom.com/games/work_never_ends\n\n#UnityRoom"
+  tweetText: "\u300E\u4ED5\u4E8B\u304C\u7D0D\u671F\u306B\u9593\u306B\u5408\u308F\u306A\u3044\uFF01\u300F\u3092\u30AF\u30EA\u30A2\u3057\u307E\u3057\u305F\uFF01\nhttps://unityroom.com/games/work_never_ends\n#UnityRoom"
 --- !u!114 &867298325
 MonoBehaviour:
   m_ObjectHideFlags: 0

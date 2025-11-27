@@ -110,10 +110,13 @@ namespace Components.Game.Graph.Scripts
 
         [SerializeField] private Components.Game.Canvas.Scripts.ResultManager resultManager;
         [SerializeField] private Components.Game.Canvas.Scripts.TimeLimitManager timeLimitManager; // 追加
+        [Header("Game Over Display Settings")]
+        [SerializeField] private float gameOverRemainTextMinimum = 0.1f;
 
         private bool isInitialized = false;
         private const float AlphaTransitionSpeed = 1.0f / 0.3f; 
         private const float CompletionAnimDuration = 0.3f;
+        private bool isGameOverResultShowing = false;
 
         [SerializeField] private Components.Game.Workers.Scripts.WorkersGenerator workersGenerator;
         
@@ -173,6 +176,13 @@ namespace Components.Game.Graph.Scripts
         public void ResumeProgress()
         {
             isRunning = true;
+            isGameOverResultShowing = false;
+        }
+
+        public void OnGameOverResultStarted()
+        {
+            isGameOverResultShowing = true;
+            ForceMinimumRemainText();
         }
 
         private void Update()
@@ -220,11 +230,16 @@ namespace Components.Game.Graph.Scripts
             if (shouldShow)
             {
                 float remaining = Mathf.Max(0f, worker.currentTask.totalTime - worker.currentTask.currentTime);
+                if (isGameOverResultShowing && remaining < gameOverRemainTextMinimum)
+                {
+                    remaining = gameOverRemainTextMinimum;
+                }
                 worker.remainText.text = remaining.ToString("F1");
             }
             else if (worker.remainText.gameObject.activeSelf && worker.isWorking == false) // フェードアウト中かつ次のタスク未開始
             {
-                worker.remainText.text = "0.0";
+                float value = isGameOverResultShowing ? Mathf.Max(gameOverRemainTextMinimum, 0f) : 0f;
+                worker.remainText.text = value.ToString("F1");
             }
         }
 
@@ -358,6 +373,24 @@ namespace Components.Game.Graph.Scripts
              foreach(var txt in texts) { Color c = txt.color; c.a = alpha; txt.color = c; }
              foreach(var spr in sprites) { Color c = spr.color; c.a = alpha; spr.color = c; }
              foreach(var img in images) { Color c = img.color; c.a = alpha; img.color = c; }
+        }
+
+        private void ForceMinimumRemainText()
+        {
+            foreach (var worker in workers)
+            {
+                if (worker?.remainText == null) continue;
+                float currentValue;
+                if (!float.TryParse(worker.remainText.text, out currentValue))
+                {
+                    currentValue = 0f;
+                }
+
+                if (currentValue < gameOverRemainTextMinimum)
+                {
+                    worker.remainText.text = gameOverRemainTextMinimum.ToString("F1");
+                }
+            }
         }
 
         public void Initialize()

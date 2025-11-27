@@ -143,6 +143,7 @@ namespace Components.Game.Canvas.Scripts
             if (taskProgresser != null)
             {
                 taskProgresser.StopProgress();
+                taskProgresser.OnGameOverResultStarted();
             }
             
             if (resultManager != null)

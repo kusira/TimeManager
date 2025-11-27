@@ -310,7 +310,7 @@ MonoBehaviour:
     - itemId: monster
       count: 3
     - itemId: mate
-      count: 1
+      count: 10
     timeLimit: 30
   - stageName: "\u6700\u7D42\u65E5"
     vertices:
@@ -389,5 +389,5 @@ MonoBehaviour:
     - itemId: monster
       count: 2
     - itemId: mate
-      count: 2
+      count: 20
     timeLimit: 30
