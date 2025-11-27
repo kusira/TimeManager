@@ -47,7 +47,6 @@ MonoBehaviour:
     - itemId: jelly
       count: 2
     timeLimit: 15
-    initialWorkerCount: 2
   - stageName: "2\u65E5\u76EE"
     vertices:
     - i: 0
@@ -96,7 +95,6 @@ MonoBehaviour:
     - itemId: monster
       count: 1
     timeLimit: 20
-    initialWorkerCount: 2
   - stageName: "3\u65E5\u76EE"
     vertices:
     - i: 0
@@ -119,7 +117,7 @@ MonoBehaviour:
       taskCompletionTime: 6
     - i: 1
       j: 2
-      taskCompletionTime: 17
+      taskCompletionTime: 16
     - i: 1
       j: 3
       taskCompletionTime: 4
@@ -148,13 +146,12 @@ MonoBehaviour:
       toIndex: 3
     stageItems:
     - itemId: riceball
-      count: 1
+      count: 2
     - itemId: jelly
       count: 2
     - itemId: monster
-      count: 3
+      count: 2
     timeLimit: 20
-    initialWorkerCount: 2
   - stageName: "4\u65E5\u76EE"
     vertices:
     - i: 0
@@ -191,15 +188,12 @@ MonoBehaviour:
       toIndex: 2
     - fromIndex: 5
       toIndex: 4
-    - fromIndex: 4
-      toIndex: 7
     stageItems:
     - itemId: riceball
       count: 2
     - itemId: jelly
       count: 2
     timeLimit: 15
-    initialWorkerCount: 3
   - stageName: "5\u65E5\u76EE"
     vertices:
     - i: 0
@@ -253,7 +247,6 @@ MonoBehaviour:
     - itemId: mate
       count: 1
     timeLimit: 25
-    initialWorkerCount: 3
   - stageName: "6\u65E5\u76EE"
     vertices:
     - i: 0
@@ -319,7 +312,6 @@ MonoBehaviour:
     - itemId: mate
       count: 1
     timeLimit: 30
-    initialWorkerCount: 3
   - stageName: "\u6700\u7D42\u65E5"
     vertices:
     - i: 0
@@ -399,4 +391,3 @@ MonoBehaviour:
     - itemId: mate
       count: 2
     timeLimit: 30
-    initialWorkerCount: 3

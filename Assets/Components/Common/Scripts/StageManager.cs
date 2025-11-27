@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement; // 追加
@@ -10,6 +11,7 @@ namespace Components.Game
     public class StageManager : MonoBehaviour
     {
         public static StageManager Instance { get; private set; }
+        public static event Action<int> StageIndexChanged;
 
         [Header("Settings")]
         [Tooltip("現在のステージインデックス")]
@@ -25,6 +27,7 @@ namespace Components.Game
         [SerializeField] private TimeLimitManager timeLimitManager;
 
         public int CurrentStageIndex => currentStageIndex;
+        private bool visualUpdateDeferred = false;
 
         private const string PREFS_KEY_MAX_STAGE = "MaxReachedStage";
 
@@ -125,6 +128,8 @@ namespace Components.Game
 
             ApplyStageIndex();
             UpdateUI();
+            visualUpdateDeferred = false;
+            NotifyStageIndexChanged();
         }
 
         /// <summary>
@@ -167,11 +172,18 @@ namespace Components.Game
         }
 
         // 必要に応じて外部からステージを変更するメソッド
-        public void SetStage(int index)
+        public void SetStage(int index, bool deferVisualUpdate = false)
         {
             currentStageIndex = index;
+            if (deferVisualUpdate)
+            {
+                visualUpdateDeferred = true;
+                return;
+            }
+
             ApplyStageIndex();
             UpdateUI();
+            NotifyStageIndexChanged();
         }
 
         /// <summary>
@@ -189,6 +201,14 @@ namespace Components.Game
         public static void SetNextStage(int index)
         {
             PendingStageIndex = index;
+        }
+
+        private void NotifyStageIndexChanged()
+        {
+            if (!visualUpdateDeferred)
+            {
+                StageIndexChanged?.Invoke(currentStageIndex);
+            }
         }
     }
 }

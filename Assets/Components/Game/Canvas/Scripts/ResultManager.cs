@@ -336,7 +336,8 @@ namespace Components.Game.Canvas.Scripts
 
                     Time.timeScale = 1f;
 
-                    int currentStage = stageManager != null ? stageManager.CurrentStageIndex : 0;
+                    var stageManagerRef = stageManager != null ? stageManager : StageManager.Instance;
+                    int currentStage = stageManagerRef != null ? stageManagerRef.CurrentStageIndex : 0;
                     bool isLastStage = stageManager != null && stageDatabase != null && currentStage >= stageDatabase.StageCount - 1;
 
                     if (isLastStage)
@@ -349,9 +350,10 @@ namespace Components.Game.Canvas.Scripts
                         int nextStageIndex = currentStage + 1;
                         System.Action applyStage = () =>
                         {
-                            if (stageManager != null)
+                            var targetManager = stageManager != null ? stageManager : StageManager.Instance;
+                            if (targetManager != null)
                             {
-                                stageManager.SetStage(nextStageIndex);
+                                targetManager.SetStage(nextStageIndex, true);
                             }
                             StageManager.SetNextStage(nextStageIndex);
                         };

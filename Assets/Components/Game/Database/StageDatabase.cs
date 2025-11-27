@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Components.Game.Graph.Scripts; // GraphGeneratorの定義を使用
@@ -24,9 +25,6 @@ namespace Components.Game
             [Tooltip("制限時間 (秒)")]
             public float timeLimit = 60f;
 
-            [Header("Worker Settings")]
-            [Tooltip("初期配置するワーカーの人数")]
-            public int initialWorkerCount = 1;
         }
 
         [System.Serializable]
@@ -38,13 +36,20 @@ namespace Components.Game
 
         [SerializeField] private List<StageData> stages = new List<StageData>();
 
-        public int StageCount => stages.Count;
+        public StageData[] Stages => stages != null ? stages.ToArray() : Array.Empty<StageData>();
+        public int StageCount => Stages.Length;
 
         /// <summary>
         /// 指定されたインデックスのステージデータを取得します。
         /// </summary>
         public StageData GetStageData(int index)
         {
+            if (stages == null || stages.Count == 0)
+            {
+                Debug.LogWarning("Stage list is empty.");
+                return null;
+            }
+
             if (index >= 0 && index < stages.Count)
             {
                 return stages[index];

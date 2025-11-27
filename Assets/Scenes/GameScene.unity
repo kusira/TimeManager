@@ -467,8 +467,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 63713392}
-  - component: {fileID: 63713394}
   - component: {fileID: 63713393}
+  - component: {fileID: 63713394}
   m_Layer: 0
   m_Name: Graph
   m_TagString: Untagged
@@ -2546,7 +2546,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u793E\u54E1\u304C\u7D0D\u671F\u306B\u9593\u306B\u5408\u3046\u3088\u3046\u306B\u304A\u4ED5\u4E8B\u3092\u3057\u3066\u3044\u307E\u3059\u3002\n\u3042\u306A\u305F\u306F\u4F1A\u793E\u306E\u793E\u54E1\u304C\u6642\u9593\u5185\u306B\u3059\u3079\u3066\u306E\u30BF\u30B9\u30AF\u3092\u5B8C\u4E86\u3059\u308B\u304A\u624B\u4F1D\u3044\u3092\u3057\u307E\u3059\u3002"
+  m_text: "\u793E\u54E1\u304C\u7D0D\u671F\u306B\u9593\u306B\u5408\u3046\u3088\u3046\u306B\u304A\u4ED5\u4E8B\u3092\u3057\u3066\u3044\u307E\u3059\u3002\n\u793E\u54E1\u306E\u304A\u624B\u4F1D\u3044\u3092\u3057\u3066\u3001\u5236\u9650\u6642\u9593\u5185\u306B\u3059\u3079\u3066\u306E\u4ED5\u4E8B\u3092\u5B8C\u4E86\u3055\u305B\u3066\u304F\u3060\u3055\u3044\uFF01"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fbd5f39f6f09b5947a02b20881ebe45f, type: 2}
   m_sharedMaterial: {fileID: -3466088568980908957, guid: fbd5f39f6f09b5947a02b20881ebe45f, type: 2}
@@ -3384,8 +3384,9 @@ MonoBehaviour:
   - {fileID: 840595437}
   - {fileID: 325592555}
   - {fileID: 21440640}
-  fadeDuration: 0.5
-  slideDistance: 50
+  behavioursToPause:
+  - {fileID: 63713393}
+  - {fileID: 2062246661}
 --- !u!1 &1288458395
 GameObject:
   m_ObjectHideFlags: 0
@@ -5457,7 +5458,7 @@ MonoBehaviour:
   currentStageIndex: 0
   isRunning: 1
   resultManager: {fileID: 1508617266}
-  taskProgresser: {fileID: 0}
+  taskProgresser: {fileID: 63713393}
 --- !u!1 &2074028186
 GameObject:
   m_ObjectHideFlags: 0
@@ -5831,7 +5832,7 @@ PrefabInstance:
       objectReference: {fileID: 2062246661}
     - target: {fileID: 8960602145054908316, guid: a39d4cb41e89432449bc62fe0d6ba23c, type: 3}
       propertyPath: currentStageIndex
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

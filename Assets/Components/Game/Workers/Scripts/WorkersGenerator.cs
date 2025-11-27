@@ -24,15 +24,29 @@ namespace Components.Game.Workers.Scripts
         // 生成されたワーカーのリストを公開
         public List<GameObject> GeneratedWorkers { get; private set; } = new List<GameObject>();
 
-        private void Start()
+        private void OnEnable()
         {
-            // StageManagerがアサインされていない場合は探す
+            StageManager.StageIndexChanged += HandleStageIndexChanged;
+
+            if (StageManager.Instance != null)
+            {
+                stageManager = StageManager.Instance;
+                HandleStageIndexChanged(stageManager.CurrentStageIndex);
+            }
+        }
+
+        private void OnDisable()
+        {
+            StageManager.StageIndexChanged -= HandleStageIndexChanged;
+        }
+
+        private void HandleStageIndexChanged(int index)
+        {
             if (stageManager == null)
             {
                 stageManager = StageManager.Instance;
             }
 
-            // ワーカー生成
             GenerateWorkers();
         }
 
@@ -50,8 +64,7 @@ namespace Components.Game.Workers.Scripts
 
             if (stageData == null) return;
 
-            // 人数を取得 (StageDataに追加が必要)
-            int workerCount = stageData.initialWorkerCount;
+            int workerCount = CalculateWorkerCount(stageData);
 
             // スケール調整
             AdjustScale(workerCount);
@@ -103,6 +116,25 @@ namespace Components.Game.Workers.Scripts
             {
                 taskProgresser.SetWorkers(GeneratedWorkers);
             }
+        }
+
+        private int CalculateWorkerCount(StageDatabase.StageData stageData)
+        {
+            if (stageData == null || stageData.vertices == null || stageData.vertices.Count == 0)
+            {
+                return 1;
+            }
+
+            int maxRowIndex = 0;
+            foreach (var vertex in stageData.vertices)
+            {
+                if (vertex != null && vertex.i > maxRowIndex)
+                {
+                    maxRowIndex = vertex.i;
+                }
+            }
+
+            return Mathf.Max(1, maxRowIndex + 1);
         }
 
         private void AdjustScale(int count)
