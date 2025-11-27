@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro; // 追加
 using Components.Game;
 
@@ -23,16 +24,16 @@ namespace Components.Game.Canvas.Scripts
         [Tooltip("ページとして表示するゲームオブジェクトのリスト (P1, P2, P3...)")]
         [SerializeField] private GameObject[] tutorialPages;
 
-        [Header("Settings")]
-        [SerializeField] private float fadeDuration = 0.3f; // MenuButtonManagerと同じ0.3fに合わせる
-        [Tooltip("パネルのアニメーション移動距離")]
-        [SerializeField] private float slideDistance = 50f;
-
         private Vector2 originalPosition;
         private CanvasGroup backgroundCanvasGroup;
         private RectTransform panelRectTransform;
         private CanvasGroup panelCanvasGroup;
         private int currentPageIndex = 0;
+        [Header("時間停止対象（任意）")]
+        [Tooltip("チュートリアル中に Update 等を止めたい MonoBehaviour を登録")]
+        [SerializeField] private List<MonoBehaviour> behavioursToPause = new List<MonoBehaviour>();
+        private bool hasPausedBehaviours = false;
+        private readonly Dictionary<MonoBehaviour, bool> pausedBehaviourStates = new Dictionary<MonoBehaviour, bool>();
 
         void Start()
         {
@@ -51,6 +52,7 @@ namespace Components.Game.Canvas.Scripts
             }
 
             // 初期化
+            PauseGameTime();
             SetupUI();
             currentPageIndex = 0;
             UpdatePageUI(); // 初回のUI更新
@@ -72,9 +74,14 @@ namespace Components.Game.Canvas.Scripts
 
         }
 
+        private void OnDisable()
+        {
+            ResumeGameTime();
+        }
+
         private void OnDestroy()
         {
-            // ここでは Time.timeScale は触らない（別の仕組みで変更されている可能性があるため）
+            ResumeGameTime();
         }
 
         private void SetupUI()
@@ -140,6 +147,7 @@ namespace Components.Game.Canvas.Scripts
         public void CloseTutorial()
         {
             if (blackGround != null) blackGround.SetActive(false);
+            ResumeGameTime();
             gameObject.SetActive(false);
         }
 
@@ -150,6 +158,35 @@ namespace Components.Game.Canvas.Scripts
                 currentPageIndex--;
                 UpdatePageUI();
             }
+        }
+
+        private void PauseGameTime()
+        {
+            if (hasPausedBehaviours) return;
+
+            pausedBehaviourStates.Clear();
+            foreach (var behaviour in behavioursToPause)
+            {
+                if (behaviour == null) continue;
+                pausedBehaviourStates[behaviour] = behaviour.enabled;
+                behaviour.enabled = false;
+            }
+
+            hasPausedBehaviours = true;
+        }
+
+        private void ResumeGameTime()
+        {
+            if (!hasPausedBehaviours) return;
+
+            foreach (var pair in pausedBehaviourStates)
+            {
+                if (pair.Key == null) continue;
+                pair.Key.enabled = pair.Value;
+            }
+
+            pausedBehaviourStates.Clear();
+            hasPausedBehaviours = false;
         }
 
         private void OnNextPage()

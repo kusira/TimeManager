@@ -85,7 +85,7 @@ namespace Components.Game.Canvas.Scripts
         [SerializeField] private System.Collections.Generic.List<UIAnimationGroup> uiGroups = new System.Collections.Generic.List<UIAnimationGroup>();
 
         private CanvasGroup backgroundCanvasGroup;
-
+        
         private void Awake()
         {
             if (blackGround != null)
@@ -336,19 +336,33 @@ namespace Components.Game.Canvas.Scripts
 
                     Time.timeScale = 1f;
 
-                    // Check if it is the last stage
-                    if (stageManager != null && stageDatabase != null && stageManager.CurrentStageIndex >= stageDatabase.StageCount - 1)
+                    int currentStage = stageManager != null ? stageManager.CurrentStageIndex : 0;
+                    bool isLastStage = stageManager != null && stageDatabase != null && currentStage >= stageDatabase.StageCount - 1;
+
+                    if (isLastStage)
                     {
                         if (fadeManager != null) fadeManager.FadeOutAndLoadScene(endingSceneName);
                         else SceneManager.LoadScene(endingSceneName);
                     }
                     else
                     {
-                        if (stageManager != null) stageManager.PrepareNextStage();
+                        int nextStageIndex = currentStage + 1;
+                        System.Action applyStage = () =>
+                        {
+                            if (stageManager != null)
+                            {
+                                stageManager.SetStage(nextStageIndex);
+                            }
+                            StageManager.SetNextStage(nextStageIndex);
+                        };
                         
                         string currentScene = SceneManager.GetActiveScene().name;
-                        if (fadeManager != null) fadeManager.FadeOutAndLoadScene(currentScene);
-                        else SceneManager.LoadScene(currentScene);
+                        if (fadeManager != null) fadeManager.FadeOutAndLoadScene(currentScene, 0f, applyStage);
+                        else
+                        {
+                            applyStage();
+                            SceneManager.LoadScene(currentScene);
+                        }
                     }
                 };
                 buttons.Add((nextButtonSprite, nextAction));
