@@ -29,6 +29,7 @@ namespace Components.Game.Items.Scripts
         // ドラッグ中のオブジェクト（自分自身か、生成したコピーか）
         private GameObject draggingObject;
         private bool isDraggingCopy = false;
+        private bool countDecrementedOnDrag = false; // ドラッグ開始時に個数をデクリメントしたか
 
         // ホバー制御用のクラス（ターゲットごとの状態保持）
         private class HoverState
@@ -50,11 +51,15 @@ namespace Components.Game.Items.Scripts
             if (isUsing) return;
 
             startPosition = transform.position;
+            countDecrementedOnDrag = false;
 
             // 個数が残っているなら、元のオブジェクトはそのままでコピーを生成してドラッグする
             // 個数が1以下（つまりこれが最後の1個）なら、自分自身をドラッグする
             if (itemAssigner != null && itemAssigner.CurrentCount > 1)
             {
+                // ドラッグ開始時に個数をデクリメント
+                itemAssigner.DecrementCount();
+                countDecrementedOnDrag = true;
                 CreateDragCopy();
             }
             else
@@ -177,8 +182,14 @@ namespace Components.Game.Items.Scripts
                 // キャンセル時
                 if (isDraggingCopy)
                 {
-                    // コピーをドラッグしていた場合は、コピーを消すだけ
+                    // コピーをドラッグしていた場合は、コピーを消す
                     Destroy(draggingObject);
+                    
+                    // ドラッグ開始時にデクリメントした個数を戻す
+                    if (countDecrementedOnDrag && itemAssigner != null)
+                    {
+                        itemAssigner.AssignItem(itemAssigner.CurrentItemId, itemAssigner.CurrentCount + 1);
+                    }
                 }
                 else
                 {
@@ -296,8 +307,18 @@ namespace Components.Game.Items.Scripts
             Vector3 midScale = startAnimScale * 1.2f; // 現在のスケールを基準に拡大
             Vector3 endScale = Vector3.zero;
 
-            // 個数を減らす
-            int remaining = itemAssigner.DecrementCount();
+            // 個数を減らす（コピーを使った場合は既にデクリメント済みなので、本体を使った場合のみ）
+            int remaining = 0;
+            if (isDraggingCopy)
+            {
+                // コピーを使った場合は、既にドラッグ開始時にデクリメント済み
+                remaining = itemAssigner.CurrentCount;
+            }
+            else
+            {
+                // 本体を使った場合は、ここでデクリメント
+                remaining = itemAssigner.DecrementCount();
+            }
 
             if (isDraggingCopy)
             {

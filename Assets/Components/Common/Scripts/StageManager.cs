@@ -52,6 +52,16 @@ namespace Components.Game
             }
         }
 
+        /// <summary>
+        /// セーブデータを削除する（エディタ用）
+        /// </summary>
+        public void DeleteSaveData()
+        {
+            PlayerPrefs.DeleteKey(PREFS_KEY_MAX_STAGE);
+            PlayerPrefs.Save();
+            Debug.Log("セーブデータを削除しました。");
+        }
+
         // 次のシーンロード時に適用するステージインデックス
         private static int? PendingStageIndex = null;
 

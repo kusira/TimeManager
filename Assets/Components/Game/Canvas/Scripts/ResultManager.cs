@@ -113,6 +113,14 @@ namespace Components.Game.Canvas.Scripts
 
         public void ShowGameClear()
         {
+            // 成功リザルト表示時に最大到達ステージを更新
+            var stageManagerRef = stageManager != null ? stageManager : StageManager.Instance;
+            if (stageManagerRef != null)
+            {
+                int nextStageIndex = stageManagerRef.CurrentStageIndex + 1;
+                StageManager.UpdateMaxReachedStage(nextStageIndex);
+            }
+            
             PlayResultSE(true);
             StartCoroutine(ShowResultSequence(true));
         }
