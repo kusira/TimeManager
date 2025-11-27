@@ -10,6 +10,8 @@ namespace Components.Game.Canvas.Scripts
         [Header("Audio Mixer")]
         [Tooltip("AudioMixerをアサイン (Exposed Parameters: 'BGM', 'SE' が必要)")]
         [SerializeField] private AudioMixer audioMixer;
+        [SerializeField] private string bgmPrefKey = "VolumeManager_BGM";
+        [SerializeField] private string sePrefKey = "VolumeManager_SE";
 
         [Header("BGM Settings")]
         [SerializeField] private Slider bgmSlider;
@@ -25,9 +27,12 @@ namespace Components.Game.Canvas.Scripts
 
         private void Start()
         {
+            float savedBgm = PlayerPrefs.HasKey(bgmPrefKey) ? PlayerPrefs.GetFloat(bgmPrefKey) : (bgmSlider != null ? bgmSlider.value : 1f);
+            float savedSe = PlayerPrefs.HasKey(sePrefKey) ? PlayerPrefs.GetFloat(sePrefKey) : (seSlider != null ? seSlider.value : 1f);
+
             if (bgmSlider != null)
             {
-                // 初期値の設定 (スライダーの現在の値を使用)
+                bgmSlider.value = savedBgm;
                 SetBGMVolume(bgmSlider.value);
                 // リスナー登録
                 bgmSlider.onValueChanged.AddListener(SetBGMVolume);
@@ -35,7 +40,7 @@ namespace Components.Game.Canvas.Scripts
 
             if (seSlider != null)
             {
-                // 初期値の設定
+                seSlider.value = savedSe;
                 SetSEVolume(seSlider.value);
                 // リスナー登録
                 seSlider.onValueChanged.AddListener(SetSEVolume);
@@ -58,6 +63,9 @@ namespace Components.Game.Canvas.Scripts
             {
                 audioMixer.SetFloat(BGM_PARAM, db);
             }
+
+            PlayerPrefs.SetFloat(bgmPrefKey, value);
+            PlayerPrefs.Save();
         }
 
         public void SetSEVolume(float value)
@@ -75,6 +83,9 @@ namespace Components.Game.Canvas.Scripts
             {
                 audioMixer.SetFloat(SE_PARAM, db);
             }
+
+            PlayerPrefs.SetFloat(sePrefKey, value);
+            PlayerPrefs.Save();
         }
     }
 }
