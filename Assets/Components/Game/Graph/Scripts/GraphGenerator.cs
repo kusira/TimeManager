@@ -53,9 +53,24 @@ namespace Components.Game.Graph.Scripts
         // 生成された頂点のGameObjectを保持するリスト（外部参照用）
         private List<GameObject> generatedVertexObjects = new List<GameObject>();
 
-        private void Start()
+        private void OnEnable()
         {
-            // StageDatabaseからデータをロードする
+            StageManager.StageIndexChanged += HandleStageIndexChanged;
+
+            if (StageManager.Instance != null)
+            {
+                HandleStageIndexChanged(StageManager.Instance.CurrentStageIndex);
+            }
+        }
+
+        private void OnDisable()
+        {
+            StageManager.StageIndexChanged -= HandleStageIndexChanged;
+        }
+
+        private void HandleStageIndexChanged(int index)
+        {
+            SetStageIndex(index);
             LoadStageData();
             GenerateGraph();
         }

@@ -57,16 +57,17 @@ namespace Components.Game.Canvas.Scripts
         /// </summary>
         /// <param name="sceneName">遷移先のシーン名</param>
         /// <param name="delay">開始までの遅延時間</param>
-        public void FadeOutAndLoadScene(string sceneName, float delay = 0f)
+        public void FadeOutAndLoadScene(string sceneName, float delay = 0f, System.Action beforeLoadAction = null)
         {
             if (fadeImage != null)
             {
                 fadeImage.gameObject.SetActive(true);
-                StartCoroutine(FadeOutAndLoadSceneCoroutine(sceneName, delay));
+                StartCoroutine(FadeOutAndLoadSceneCoroutine(sceneName, delay, beforeLoadAction));
             }
             else
             {
                 // Imageがない場合は即遷移
+                beforeLoadAction?.Invoke();
                 SceneManager.LoadScene(sceneName);
             }
         }
@@ -95,7 +96,7 @@ namespace Components.Game.Canvas.Scripts
             if (fadeImage != null) fadeImage.gameObject.SetActive(false);
         }
 
-        private IEnumerator FadeOutAndLoadSceneCoroutine(string sceneName, float delay)
+        private IEnumerator FadeOutAndLoadSceneCoroutine(string sceneName, float delay, System.Action beforeLoadAction)
         {
             SetAlpha(0f);
 
@@ -118,6 +119,7 @@ namespace Components.Game.Canvas.Scripts
             SetAlpha(1f);
             
             // 遷移
+            beforeLoadAction?.Invoke();
             SceneManager.LoadScene(sceneName);
         }
 

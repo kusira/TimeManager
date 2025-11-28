@@ -9,6 +9,7 @@ public class OpenAndClose : MonoBehaviour
     [SerializeField] private Transform endPos;      // 表示位置（開いた位置）
     [SerializeField] private float speed = 8f;      // 移動速度
     [SerializeField] private RectTransform contentRect; // クリック判定を行う対象（この範囲外をクリックで閉じる）
+    [SerializeField] private AudioSource clickAudioSource;
 
     private Coroutine moveRoutine;
     private bool isOpen = false;
@@ -50,6 +51,7 @@ public class OpenAndClose : MonoBehaviour
         if (moveRoutine != null) StopCoroutine(moveRoutine);
         moveRoutine = StartCoroutine(MoveTo(endPos.position));
         StartCoroutine(SetIsOpenDelay(true)); // 1フレーム待ってからフラグを立てる
+        PlayClickSE();
     }
 
     public void Close()
@@ -57,6 +59,7 @@ public class OpenAndClose : MonoBehaviour
         isOpen = false;
         if (moveRoutine != null) StopCoroutine(moveRoutine);
         moveRoutine = StartCoroutine(MoveTo(startPos.position));
+        PlayClickSE();
     }
 
     private IEnumerator SetIsOpenDelay(bool open)
@@ -87,5 +90,12 @@ public class OpenAndClose : MonoBehaviour
 
         moveTarget.position = target;
         moveRoutine = null;
+    }
+
+    private void PlayClickSE()
+    {
+        if (clickAudioSource == null) return;
+        if (clickAudioSource.isPlaying) clickAudioSource.Stop();
+        clickAudioSource.Play();
     }
 }

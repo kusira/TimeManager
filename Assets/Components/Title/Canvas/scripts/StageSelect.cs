@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using System;
 using Components.Game.Canvas.Scripts;
+using Components.Game; // StageManagerのため
 
 [Serializable]
 public class ButtonDataItem
@@ -10,7 +11,8 @@ public class ButtonDataItem
     public string scene;
     public string comment;
     public string workTime;   
-    public string difficulty; 
+    public string difficulty;
+    public int stageIndex; // 追加
 }
 
 [Serializable]
@@ -86,6 +88,9 @@ public class StageSelect : MonoBehaviour
         Debug.Log(data.list[index].scene);
         if (data.list[index].scene != "non")
         {
+            // 次のシーンへステージインデックスを渡す
+            StageManager.SetNextStage(data.list[index].stageIndex);
+
             // 念のため実行時にもnullチェックして再取得を試みる
             if (fadeManager == null)
             {

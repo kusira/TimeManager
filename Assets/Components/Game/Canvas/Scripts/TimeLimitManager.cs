@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro; // 追加
 
 namespace Components.Game.Canvas.Scripts
 {
@@ -9,6 +10,9 @@ namespace Components.Game.Canvas.Scripts
         [Header("UI References")]
         [Tooltip("時間経過を表すゲージ (Image component)")]
         [SerializeField] private Image gaugeImage;
+        
+        [Tooltip("経過時間/制限時間を表示するテキスト")]
+        [SerializeField] private TextMeshProUGUI timeLimitText;
 
         [Header("Stage Settings")]
         [Tooltip("ステージデータベース")]
@@ -37,6 +41,7 @@ namespace Components.Game.Canvas.Scripts
         // public event System.Action OnTimeUp;
 
         [SerializeField] private ResultManager resultManager;
+        [SerializeField] private Components.Game.Graph.Scripts.TaskProgresser taskProgresser;
 
         private void Awake()
         {
@@ -46,6 +51,7 @@ namespace Components.Game.Canvas.Scripts
         private void Start()
         {
             if (resultManager == null) resultManager = FindFirstObjectByType<ResultManager>();
+            if (taskProgresser == null) taskProgresser = FindFirstObjectByType<Components.Game.Graph.Scripts.TaskProgresser>();
 
             // Awakeで初期化済みなのでここでは不要、ただし未初期化なら実行
             if (initialWidth <= 0) InitializeGauge();
@@ -120,11 +126,25 @@ namespace Components.Game.Canvas.Scripts
 
             // 高さは変えず、幅だけ変更
             gaugeRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, currentWidth);
+            
+            // テキスト更新
+            if (timeLimitText != null)
+            {
+                // <現在時間(少数1桁)> / <制限時間(整数)> s
+                timeLimitText.text = $"{currentTime:F1} / {timeLimit:F0} s";
+            }
         }
 
         private void OnTimeLimitExceeded()
         {
             Debug.Log("Time Limit Exceeded!");
+            
+            // タスクの進行を停止
+            if (taskProgresser != null)
+            {
+                taskProgresser.StopProgress();
+                taskProgresser.OnGameOverResultStarted();
+            }
             
             if (resultManager != null)
             {

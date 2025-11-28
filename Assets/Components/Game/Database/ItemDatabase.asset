@@ -15,13 +15,13 @@ MonoBehaviour:
   items:
   - id: riceball
     icon: {fileID: 2903298485304578703, guid: 5544976fac14abe4c8a7c8c105ddbf35, type: 3}
-    timeReduction: 2
+    timeReduction: 3
   - id: jelly
     icon: {fileID: 7146864394690992925, guid: 04b0a9ff4bf40f84a8b41a07aab0bb57, type: 3}
-    timeReduction: 4
+    timeReduction: 5
   - id: monster
     icon: {fileID: -2055008003363216766, guid: be1224818ee32a8429d1bd9447e1d497, type: 3}
-    timeReduction: 6
-  - id: caloriemate
+    timeReduction: 7
+  - id: mate
     icon: {fileID: 705332171838204702, guid: 9a2fc23e86b79604a8548fed6b4a6d62, type: 3}
-    timeReduction: 8
+    timeReduction: 10

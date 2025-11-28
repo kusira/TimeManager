@@ -3,6 +3,7 @@ using System.Collections.Generic; // 追加
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Components.Game;
 
 namespace Components.Game.Canvas.Scripts
 {
@@ -19,6 +20,8 @@ namespace Components.Game.Canvas.Scripts
         [Header("External Managers")]
         [SerializeField] private FadeManager fadeManager;
         [SerializeField] private StageManager stageManager;
+        [Tooltip("ステージ情報データベース")]
+        [SerializeField] private StageDatabase stageDatabase;
 
         [Header("Sprites")]
         [Tooltip("クリア時のテキスト画像")]
@@ -39,8 +42,28 @@ namespace Components.Game.Canvas.Scripts
         [Header("Settings")]
         [Tooltip("ホームシーンの名前")]
         [SerializeField] private string homeSceneName = "TitleScene";
+        [Tooltip("エンディングシーンの名前")]
+        [SerializeField] private string endingSceneName = "EndingScene";
         [Tooltip("ボタン間のX軸間隔")]
         [SerializeField] private float buttonSpacingX = 150f;
+
+        [Header("Audio")]
+        [Tooltip("AudioSource (SE再生用)")]
+        [SerializeField] private AudioSource clearSE;
+        [SerializeField] private AudioSource gameOverSE;
+
+        [Header("BGM Ducking Settings")]
+        [Tooltip("クリア時のBGM音量 (0.0-1.0)")]
+        [Range(0f, 1f)]
+        [SerializeField] private float clearBgmVolume = 0.2f;
+        [Tooltip("クリア時のBGMフェード時間")]
+        [SerializeField] private float clearBgmFadeTime = 0.5f;
+        
+        [Tooltip("ゲームオーバー時のBGM音量 (0.0-1.0)")]
+        [Range(0f, 1f)]
+        [SerializeField] private float gameOverBgmVolume = 0.1f;
+        [Tooltip("ゲームオーバー時のBGMフェード時間")]
+        [SerializeField] private float gameOverBgmFadeTime = 0.5f;
 
         [Header("Animation Settings")]
         [Tooltip("リザルト表示フェード時間")]
@@ -62,7 +85,7 @@ namespace Components.Game.Canvas.Scripts
         [SerializeField] private System.Collections.Generic.List<UIAnimationGroup> uiGroups = new System.Collections.Generic.List<UIAnimationGroup>();
 
         private CanvasGroup backgroundCanvasGroup;
-
+        
         private void Awake()
         {
             if (blackGround != null)
@@ -83,16 +106,72 @@ namespace Components.Game.Canvas.Scripts
 
             if (fadeManager == null) fadeManager = FindFirstObjectByType<FadeManager>();
             if (stageManager == null) stageManager = FindFirstObjectByType<StageManager>();
+            // stageDatabaseはScriptableObjectなのでFindできない。アサイン必須だが、リソースロード等の手段もある。
+            // ここではアサイン漏れ警告のみ
+            if (stageDatabase == null) Debug.LogWarning("StageDatabase is not assigned in ResultManager.");
         }
 
         public void ShowGameClear()
         {
+            // 成功リザルト表示時に最大到達ステージを更新
+            var stageManagerRef = stageManager != null ? stageManager : StageManager.Instance;
+            if (stageManagerRef != null)
+            {
+                int nextStageIndex = stageManagerRef.CurrentStageIndex + 1;
+                StageManager.UpdateMaxReachedStage(nextStageIndex);
+            }
+            
+            PlayResultSE(true);
             StartCoroutine(ShowResultSequence(true));
         }
 
         public void ShowGameOver()
         {
+            PlayResultSE(false);
             StartCoroutine(ShowResultSequence(false));
+        }
+
+        private void PlayResultSE(bool isClear)
+        {
+            // SE再生
+            AudioSource targetSource = isClear ? clearSE : gameOverSE;
+            float clipLength = 3f; // デフォルト
+
+            if (targetSource != null)
+            {
+                targetSource.Play();
+                if (targetSource.clip != null)
+                {
+                    clipLength = targetSource.clip.length;
+                }
+            }
+
+            // BGM音量調整 (ダッキング)
+            if (GameBGMManager.Instance != null)
+            {
+                StartCoroutine(DuckBGMRoutine(isClear, clipLength));
+            }
+        }
+
+        private IEnumerator DuckBGMRoutine(bool isClear, float seDuration)
+        {
+            float targetVol = isClear ? clearBgmVolume : gameOverBgmVolume;
+            float fadeTime = isClear ? clearBgmFadeTime : gameOverBgmFadeTime;
+
+            // 音量を下げる
+            if (GameBGMManager.Instance != null)
+            {
+                GameBGMManager.Instance.FadeToVolume(targetVol, fadeTime);
+            }
+
+            // SEの再生時間分待機 (フェード時間を考慮するかはお好みだが、SEが鳴り止むまで待つのが自然)
+            yield return new WaitForSecondsRealtime(seDuration);
+
+            // 音量を戻す
+            if (GameBGMManager.Instance != null)
+            {
+                GameBGMManager.Instance.ResetVolume(fadeTime);
+            }
         }
 
         private IEnumerator ShowResultSequence(bool isClear)
@@ -218,6 +297,14 @@ namespace Components.Game.Canvas.Scripts
 
             UnityEngine.Events.UnityAction homeAction = () => 
             {
+                // ボタンSEがあれば再生する (別途AudioSourceが必要ならここに追加)
+                // if (buttonSE != null) buttonSE.Play();
+
+                // BGMを戻す (不要かもしれないが、もしホームで同じBGMを使うなら必要)
+                // タイトルへ戻る場合はBGMManagerが破棄されるか、維持される設定による
+                // ここでは念のためリセットコールを入れておくが、GameBGMManagerが破棄されるなら意味はない
+                if (GameBGMManager.Instance != null) GameBGMManager.Instance.ResetVolume(0.5f);
+
                 Time.timeScale = 1f;
                 if (fadeManager != null) fadeManager.FadeOutAndLoadScene(homeSceneName);
                 else SceneManager.LoadScene(homeSceneName);
@@ -226,7 +313,19 @@ namespace Components.Game.Canvas.Scripts
 
             UnityEngine.Events.UnityAction replayAction = () => 
             {
+                // if (buttonSE != null) buttonSE.Play();
+                
+                // BGMを元の音量に戻す
+                if (GameBGMManager.Instance != null) GameBGMManager.Instance.ResetVolume(0.5f);
+
                 Time.timeScale = 1f;
+
+                // リプレイ時は現在のステージインデックスを維持する
+                if (stageManager != null)
+                {
+                    StageManager.SetNextStage(stageManager.CurrentStageIndex);
+                }
+
                 string currentScene = SceneManager.GetActiveScene().name;
                 if (fadeManager != null) fadeManager.FadeOutAndLoadScene(currentScene);
                 else SceneManager.LoadScene(currentScene);
@@ -238,12 +337,44 @@ namespace Components.Game.Canvas.Scripts
             {
                 UnityEngine.Events.UnityAction nextAction = () => 
                 {
-                    Time.timeScale = 1f;
-                    if (stageManager != null) stageManager.PrepareNextStage();
+                    // if (buttonSE != null) buttonSE.Play();
                     
-                    string currentScene = SceneManager.GetActiveScene().name;
-                    if (fadeManager != null) fadeManager.FadeOutAndLoadScene(currentScene);
-                    else SceneManager.LoadScene(currentScene);
+                    // BGMを元の音量に戻す
+                    if (GameBGMManager.Instance != null) GameBGMManager.Instance.ResetVolume(0.5f);
+
+                    Time.timeScale = 1f;
+
+                    var stageManagerRef = stageManager != null ? stageManager : StageManager.Instance;
+                    int currentStage = stageManagerRef != null ? stageManagerRef.CurrentStageIndex : 0;
+                    bool isLastStage = stageManagerRef != null && stageDatabase != null && currentStage >= stageDatabase.StageCount - 1;
+
+                    if (isLastStage)
+                    {
+                        if (fadeManager != null) fadeManager.FadeOutAndLoadScene(endingSceneName);
+                        else SceneManager.LoadScene(endingSceneName);
+                    }
+                    else
+                    {
+                        int nextStageIndex = currentStage + 1;
+                        System.Action applyStage = () =>
+                        {
+                            var targetManager = stageManager != null ? stageManager : StageManager.Instance;
+                            if (targetManager != null)
+                            {
+                                targetManager.SetStage(nextStageIndex, true);
+                            }
+                            StageManager.UpdateMaxReachedStage(nextStageIndex);
+                            StageManager.SetNextStage(nextStageIndex);
+                        };
+                        
+                        string currentScene = SceneManager.GetActiveScene().name;
+                        if (fadeManager != null) fadeManager.FadeOutAndLoadScene(currentScene, 0f, applyStage);
+                        else
+                        {
+                            applyStage();
+                            SceneManager.LoadScene(currentScene);
+                        }
+                    }
                 };
                 buttons.Add((nextButtonSprite, nextAction));
             }
